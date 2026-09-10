@@ -253,7 +253,7 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   document.querySelector('.bottom button:nth-of-type(2) i').innerHTML=bookNavIcon;
   document.querySelector('.bottom button:nth-of-type(3) i').innerHTML=tvNavIcon;
 </script><style>
-  .sync-card{padding:14px;margin:16px 0 5px;background:#fffdfa}.sync-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.sync-card b{display:block;font-size:14px}.sync-card small{display:block;color:var(--mut);font-size:12px;margin-top:3px}.sync-action{flex:none;padding:8px 11px;border-radius:10px;background:var(--pale);color:#486a65;font-size:12px}.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d0a077;margin-right:6px}.sync-dot.ok{background:#7ca990}
+  .sync-card{padding:14px;margin:16px 0 5px;background:#fffdfa}.sync-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.sync-card b{display:block;font-size:14px}.sync-card small{display:block;color:var(--mut);font-size:12px;margin-top:3px}.sync-action{flex:none;padding:8px 11px;border-radius:10px;background:var(--pale);color:#486a65;font-size:12px}.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d0a077;margin-right:6px}.sync-dot.ok{background:#7ca990}.google-signin{display:flex;align-items:center;justify-content:center;gap:10px}.google-signin span{display:grid;place-items:center;width:21px;height:21px;border-radius:50%;background:#fff;color:#4285f4;font-weight:800;font-size:13px}
 </style><script>
   /* Supabase cloud sync: one private JSON journal per signed-in account. */
   const SUPABASE_URL='https://kvxttntksohtjnwxumsf.supabase.co';
@@ -267,17 +267,16 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     if(!box){ box=document.createElement('div'); box.id='syncBox'; box.className='card sync-card'; document.querySelector('#me h1').insertAdjacentElement('afterend',box); }
     box.innerHTML=cloudUser
       ? `<div class="sync-row"><div><b><span class="sync-dot ${cloudReady?'ok':''}"></span>Cloud sync</b><small>${cloudUser.email} · ${cloudMessage}</small></div><button class="sync-action" onclick="cloudMenu()">Manage</button></div>`
-      : `<div class="sync-row"><div><b><span class="sync-dot"></span>Cloud sync</b><small>Sign in to sync phone and computer.</small></div><button class="sync-action" onclick="cloudLogin()">Sign in</button></div>`;
+      : `<div class="sync-row"><div><b><span class="sync-dot"></span>Cloud sync</b><small>Sign in with Google to sync phone and computer.</small></div><button class="sync-action" onclick="cloudLogin()">Sign in</button></div>`;
   }
   function cloudLogin(){
     modal.classList.add('show');
-    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">CLOUD SYNC</span><h2>Sign in to sync</h2><p class="sub">Use the same email on your phone and computer.</p><label>Email address</label><input class="field" id="cloudEmail" type="email" placeholder="you@example.com"><button class="save" onclick="sendMagicLink()">Email me a sign-in link</button>`;
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">CLOUD SYNC</span><h2>Sign in to sync</h2><p class="sub">Use the same Google account on your phone and computer.</p><button class="save google-signin" onclick="signInWithGoogle()"><span>G</span>Continue with Google</button>`;
   }
-  async function sendMagicLink(){
-    const email=document.getElementById('cloudEmail').value.trim(); if(!email) return;
-    const {error}=await cloudClient.auth.signInWithOtp({email,options:{emailRedirectTo:APP_URL}});
+  async function signInWithGoogle(){
+    if(!cloudClient){alert('Cloud sync is still loading. Try again in a moment.');return}
+    const {error}=await cloudClient.auth.signInWithOAuth({provider:'google',options:{redirectTo:APP_URL}});
     if(error){ alert(error.message); return; }
-    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Check your email</h2><p>Open the sign-in link in this same browser. Return here after it confirms your account.</p>`;
   }
   function cloudMenu(){
     modal.classList.add('show');
