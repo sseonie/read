@@ -250,4 +250,77 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   const tvNavIcon='<svg viewBox="0 0 24 24"><path d="m8 3 4 4 4-4"/><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 22h6"/></svg>';
   document.querySelector('.bottom button:nth-of-type(2) i').innerHTML=bookNavIcon;
   document.querySelector('.bottom button:nth-of-type(3) i').innerHTML=tvNavIcon;
+</script><style>
+  .sync-card{padding:14px;margin:16px 0 5px;background:#fffdfa}.sync-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.sync-card b{display:block;font-size:14px}.sync-card small{display:block;color:var(--mut);font-size:12px;margin-top:3px}.sync-action{flex:none;padding:8px 11px;border-radius:10px;background:var(--pale);color:#486a65;font-size:12px}.sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#d0a077;margin-right:6px}.sync-dot.ok{background:#7ca990}
+</style><script>
+  /* Supabase cloud sync: one private JSON journal per signed-in account. */
+  const SUPABASE_URL='https://kvxttntksohtjnwxumsf.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY='sb_publishable_LPcuTrVlzqyQcF1kCIh6lg_ZDtFv93R';
+  const APP_URL='https://sseonie.github.io/read/';
+  let cloudClient=null, cloudUser=null, cloudReady=false, cloudMessage='Not signed in';
+  const saveOnDevice=save;
+  save=function(){ saveOnDevice(); if(cloudUser) uploadCloud(); };
+  function renderSync(){
+    let box=document.getElementById('syncBox');
+    if(!box){ box=document.createElement('div'); box.id='syncBox'; box.className='card sync-card'; document.querySelector('#me h1').insertAdjacentElement('afterend',box); }
+    box.innerHTML=cloudUser
+      ? `<div class="sync-row"><div><b><span class="sync-dot ${cloudReady?'ok':''}"></span>Cloud sync</b><small>${cloudUser.email} · ${cloudMessage}</small></div><button class="sync-action" onclick="cloudMenu()">Manage</button></div>`
+      : `<div class="sync-row"><div><b><span class="sync-dot"></span>Cloud sync</b><small>Sign in to sync phone and computer.</small></div><button class="sync-action" onclick="cloudLogin()">Sign in</button></div>`;
+  }
+  function cloudLogin(){
+    modal.classList.add('show');
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">CLOUD SYNC</span><h2>Sign in to sync</h2><p class="sub">Use the same email on your phone and computer.</p><label>Email address</label><input class="field" id="cloudEmail" type="email" placeholder="you@example.com"><button class="save" onclick="sendMagicLink()">Email me a sign-in link</button>`;
+  }
+  async function sendMagicLink(){
+    const email=document.getElementById('cloudEmail').value.trim(); if(!email) return;
+    const {error}=await cloudClient.auth.signInWithOtp({email,options:{emailRedirectTo:APP_URL}});
+    if(error){ alert(error.message); return; }
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Check your email</h2><p>Open the sign-in link in this same browser. Return here after it confirms your account.</p>`;
+  }
+  function cloudMenu(){
+    modal.classList.add('show');
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">CLOUD SYNC</span><h2>${cloudUser.email}</h2><p class="sub">${cloudMessage}</p><button class="save" onclick="syncNow()">Sync now</button><button class="secondary" onclick="cloudSignOut()">Sign out</button>`;
+  }
+  async function loadCloud(){
+    if(!cloudUser) return;
+    cloudMessage='Loading…'; renderSync();
+    const {data,error}=await cloudClient.from('journal_states').select('data').eq('user_id',cloudUser.id).maybeSingle();
+    if(error){ cloudMessage='Database setup required'; cloudReady=false; renderSync(); return; }
+    if(data?.data?.items){ D=data.data; saveOnDevice(); render(); cloudMessage='Synced'; }
+    else { await uploadCloud(); cloudMessage='First backup saved'; }
+    cloudReady=true; renderSync();
+  }
+  async function uploadCloud(){
+    if(!cloudUser||!cloudClient) return;
+    const {error}=await cloudClient.from('journal_states').upsert({user_id:cloudUser.id,data:D,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+    cloudMessage=error?'Could not sync':'Synced'; cloudReady=!error; renderSync();
+  }
+  async function syncNow(){ await uploadCloud(); closeM(); }
+  async function cloudSignOut(){ await cloudClient.auth.signOut(); cloudUser=null; cloudReady=false; cloudMessage='Not signed in'; closeM(); renderSync(); }
+  function setupCloud(){
+    cloudClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,detectSessionInUrl:true,autoRefreshToken:true}});
+    cloudClient.auth.getSession().then(({data})=>{ cloudUser=data.session?.user||null; renderSync(); if(cloudUser) loadCloud(); });
+    cloudClient.auth.onAuthStateChange((_event,session)=>{ cloudUser=session?.user||null; renderSync(); if(cloudUser) setTimeout(loadCloud,0); });
+  }
+  const supabaseScript=document.createElement('script');
+  supabaseScript.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  supabaseScript.onload=setupCloud;
+  document.head.appendChild(supabaseScript);
+  renderSync();
+</script><script>
+  /* Deleting a media item also removes its related records and statistics. */
+  function removeOrphanedLogs(){
+    const existingIds=new Set(D.items.map(record=>record.id));
+    D.logs=D.logs.filter(log=>!log.item||existingIds.has(log.item));
+  }
+  const originalItemDelete=itemDelete;
+  itemDelete=function(id){
+    if(!confirm('Delete this item and all of its journal records?')) return;
+    D.items=D.items.filter(record=>record.id!==id);
+    D.logs=D.logs.filter(log=>log.item!==id);
+    save(); closeM(); render();
+  };
+  removeOrphanedLogs();
+  save();
+  render();
 </script></body></html>
