@@ -323,4 +323,22 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   removeOrphanedLogs();
   save();
   render();
+</script><script>
+  /* TV episode picker follows the selected show's configured episode count. */
+  const baseLogForm=logForm;
+  logForm=function(type){
+    if(type!=='tv') return baseLogForm(type);
+    const shows=D.items.filter(record=>record.type==='tv');
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Log TV show</h2><label>Choose TV show</label><select class="field" id="li" onchange="renderTvEpisodes()">${shows.map(show=>`<option value="${show.id}">${show.title}</option>`).join('')}<option value="">Other / not added yet</option></select><label>Title for a new show</label><input class="field" id="lt" placeholder="Title"><label>Episodes watched</label><div class="check" id="eps"></div><label>Date</label><input class="field" id="ld" type="date" value="${selected}"><button class="save" onclick="logSave('tv')">Save record</button>`;
+    renderTvEpisodes();
+  };
+  function renderTvEpisodes(){
+    const show=item(document.getElementById('li').value);
+    const total=Math.max(1,Math.min(200,Number(show?.total)||12));
+    const watched=Number(show?.current)||0;
+    document.getElementById('eps').innerHTML=Array.from({length:total},(_,index)=>{
+      const episode=index+1;
+      return `<button type="button" class="${episode===watched+1?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
+    }).join('');
+  }
 </script></body></html>
