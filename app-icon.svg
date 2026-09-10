@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Media Journal icon">
+  <rect width="1024" height="1024" rx="222" fill="#FBF5EF"/>
+  <path d="M220 310c110-56 214-44 292 20v390c-78-64-182-76-292-20V310Z" fill="none" stroke="#718F8A" stroke-width="34" stroke-linejoin="round"/>
+  <path d="M804 310c-110-56-214-44-292 20v390c78-64 182-76 292-20V310Z" fill="none" stroke="#718F8A" stroke-width="34" stroke-linejoin="round"/>
+  <path d="M312 420c62-18 119-8 164 26M712 420c-62-18-119-8-164 26" fill="none" stroke="#718F8A" stroke-width="27" stroke-linecap="round"/>
+</svg>

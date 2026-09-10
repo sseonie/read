@@ -1,0 +1,253 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#718F8A"><link rel="icon" href="app-icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="app-icon.png"><link rel="manifest" href="manifest.webmanifest"><title>Media Journal</title><style>
+:root{--ink:#40504c;--mut:#71807a;--bg:#f7f3ed;--paper:#fffdfa;--sage:#9bb4af;--pale:#d4e0d2;--blush:#eddcd4;--peach:#efc0b2;--stone:#d4cabc;--line:#e7e0d6;--accent:#6f968f}*{box-sizing:border-box}body{margin:0;background:#dfe6df;color:var(--ink);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:520px;min-height:100vh;margin:auto;background:var(--bg);padding:25px 17px 93px}button,input,textarea,select{font:inherit}button{border:0;cursor:pointer;color:inherit}.view{display:none}.view.on{display:block}.top,.head,.calhead,.row{display:flex;align-items:center;justify-content:space-between}.ey{font-size:11px;letter-spacing:.12em;color:var(--mut);font-weight:700}h1{font-size:28px;letter-spacing:-.05em;margin:3px 0}h2{font-size:18px;margin:0}h3{font-size:16px;margin:3px 0}.round{width:38px;height:38px;border-radius:50%;background:var(--paper);font-size:19px}.card{background:var(--paper);border:1px solid var(--line);border-radius:21px;box-shadow:0 5px 17px #697a7415}.cal{padding:15px;margin-top:18px}.arrow{width:31px;height:31px;border-radius:10px;background:var(--pale);font-size:21px}.seg,.chips{display:flex;gap:6px;overflow:auto;scrollbar-width:none}.seg{padding:3px;background:#edf0ea;border-radius:10px;margin:14px 0 10px}.seg button,.chip{padding:7px 10px;border-radius:8px;background:transparent;color:var(--mut);white-space:nowrap;font-size:13px}.seg button.on{background:#fff;color:var(--ink)}.chip{background:#f0eee8}.chip.on{background:var(--sage);color:white;font-weight:700}.weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}.weekdays{font-size:11px;color:var(--mut);margin:8px 0}.day{height:43px;margin:1px;border-radius:10px;background:none;padding:5px 0;font-size:13px}.day.log{background:#e4ebe0}.day.sel{background:var(--accent);color:white;font-weight:700}.day.today:not(.sel){outline:1.5px solid var(--accent)}.dots{display:flex;justify-content:center;gap:2px;margin-top:5px}.dots i{width:5px;height:5px;border-radius:50%}.book{background:#c59b51}.movie{background:#7ea7bb}.tv{background:#b28eaf}.pod{background:#86ae94}.head{margin:23px 3px 9px}.head button{color:#4b827a;background:none;font-size:13px}.logs{padding:5px 14px}.log{display:flex;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid #eee9e0}.log:last-child{border:0}.icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#edf0ea}.copy{flex:1;min-width:0}.copy b{display:block;font-size:14px}.sub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mut);font-size:12px}.weekgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.wd{min-height:95px;padding:7px 4px;border-radius:12px;background:#f2f1eb;font-size:11px}.wd.active{background:#dfe9db}.mini{font-size:14px;margin-top:8px}.media{display:flex;gap:12px;padding:12px;margin:10px 0}.cover{width:62px;height:82px;border-radius:12px;flex:none;display:grid;place-items:center;color:#fff;font-size:25px}.bookc{background:#6b928f}.moviec{background:#82a8b8}.tvc{background:#b28eaf}.podc{background:#86ae94}.info{flex:1;min-width:0}.info p{margin:3px 0;font-size:12px;color:var(--mut)}.bar{height:6px;border-radius:9px;background:#e8ece5;overflow:hidden;margin:9px 0 5px}.bar i{display:block;height:100%;background:var(--accent)}.heart{color:#c27a79}.fav{background:none;font-size:20px;color:#c3b6a8}.fav.on{color:#c77d79}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:520px;width:100%;display:flex;justify-content:space-around;background:#fffdfaeF;border-top:1px solid var(--line);padding:9px 8px 13px;z-index:4}.nav{display:grid;place-items:center;gap:3px;background:none;color:var(--mut);font-size:10px}.nav i{font-style:normal;font-size:19px}.nav.on{color:#4e837b;font-weight:700}.fab{position:fixed;left:calc(50% + 173px);bottom:74px;width:53px;height:53px;border-radius:17px;background:var(--accent);color:#fff;font-size:29px;z-index:6}.modal{display:none;position:fixed;inset:0;background:#34413d55;z-index:20;align-items:end}.modal.show{display:flex}.sheet{width:min(520px,100%);max-height:90vh;overflow:auto;background:var(--bg);border-radius:25px 25px 0 0;padding:20px 18px 30px}.close{float:right;width:30px;height:30px;border-radius:50%;background:#e8e6df;font-size:19px}.field{width:100%;border:1px solid #dcded6;background:#fff;border-radius:11px;padding:11px;margin:5px 0 10px;color:var(--ink)}label{display:block;font-size:12px;font-weight:700;color:#60716c;margin-top:9px}.save{width:100%;padding:13px;border-radius:13px;background:var(--accent);color:#fff;font-weight:700;margin-top:12px}.secondary{width:100%;padding:11px;border-radius:13px;background:var(--pale);color:#42655f;margin-top:8px}.check{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.check button{padding:8px 3px;border-radius:9px;background:#fff}.check button.on{background:var(--peach)}.search{display:none;position:absolute;z-index:12;inset:0;background:var(--bg);padding:25px 17px}.search.show{display:block}.search input{width:100%;padding:13px;border-radius:13px;border:1px solid var(--line);font-size:16px}.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:13px;border-radius:14px;background:#f1f2ed}.stat b{display:block;font-size:22px;margin-top:4px}.goal{margin:13px 0}.goalline{display:flex;justify-content:space-between;font-size:13px}.heat{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:10px}.heat i{aspect-ratio:1;border-radius:3px;background:#e7e5de}.heat i.a{background:#dce9d9}.heat i.b{background:#abc8b9}.heat i.c{background:#719b92}.empty{padding:24px;text-align:center;color:var(--mut)}@media(max-width:390px){.app{padding-inline:12px}.fab{left:auto;right:17px}}
+</style><body><main class="app">
+<section id="home" class="view on"><header class="top"><div><span class="ey">MEDIA JOURNAL</span><h1>My journal</h1></div><button class="round" onclick="searchOpen()">⌕</button></header><div class="card cal"><div class="calhead"><button class="arrow" onclick="move(-1)">‹</button><h2 id="month"></h2><button class="arrow" onclick="move(1)">›</button></div><div class="seg"><button class="on" onclick="modeSet('month',this)">Month</button><button onclick="modeSet('week',this)">Week</button></div><div class="chips" id="types"></div><div id="mon"><div class="weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="days" id="days"></div></div><div id="wek" hidden><div id="weekgrid" class="weekgrid"></div></div></div><div class="head"><h2>Daily log</h2><button onclick="logAdd()">+ Add log</button></div><div class="card logs" id="daily"></div><div class="head"><h2>Timeline</h2></div><div class="card logs" id="timeline"></div></section>
+<section id="books" class="view"><header class="top"><div><span class="ey">LIBRARY</span><h1>Books</h1></div><button class="round" onclick="itemEdit('book')">＋</button></header><div class="chips" id="bookchips"></div><div id="booklist"></div></section>
+<section id="screen" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>Screen</h1></div><button class="round" onclick="itemEdit(st)">＋</button></header><div class="seg"><button class="on" onclick="screenSet('movie',this)">Movies</button><button onclick="screenSet('tv',this)">TV shows</button></div><div class="chips" id="screenchips"></div><div id="screenlist"></div></section>
+<section id="pods" class="view"><header class="top"><div><span class="ey">LISTENING LOG</span><h1>Podcasts</h1></div><button class="round" onclick="itemEdit('pod')">＋</button></header><div class="chips" id="podchips"></div><div id="podlist"></div></section>
+<section id="me" class="view"><span class="ey">YOUR YEAR</span><h1>My space</h1><div class="head"><h2>This month</h2></div><div class="card" style="padding:15px"><div class="statgrid" id="stats"></div></div><div class="head"><h2>Goals</h2><button onclick="goalEdit()">Edit</button></div><div class="card" id="goals" style="padding:14px"></div><div class="head"><h2>2026 activity</h2><button onclick="heatToggle()" id="heatlabel">All</button></div><div class="card" style="padding:14px"><span class="sub">Darker days have more entries.</span><div class="heat" id="heat"></div></div><div class="head"><h2>Year in review</h2></div><div class="card" id="wrap" style="padding:15px"></div><div class="head"><h2>Settings</h2></div><button class="secondary" onclick="exportData()">Export my data</button><button class="secondary" onclick="if(confirm('Remove all local data?')){localStorage.removeItem(K);location.reload()}">Reset local data</button></section>
+<section id="search" class="search"><button class="close" onclick="searchClose()">×</button><h1>Search</h1><input id="q" oninput="searchRun()" placeholder="Titles, creators, tags, notes"><div id="results"></div></section></main><button class="fab" id="fab" onclick="logAdd()">＋</button><nav class="bottom"><button class="nav on" onclick="go('home',this)"><i>⌂</i>Home</button><button class="nav" onclick="go('books',this)"><i>▣</i>Books</button><button class="nav" onclick="go('screen',this)"><i>◐</i>Screen</button><button class="nav" onclick="go('pods',this)"><i>♬</i>Podcasts</button><button class="nav" onclick="go('me',this)"><i>◯</i>Me</button></nav><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<script>
+const K='media-journal-english',I={book:'📚',movie:'🎬',tv:'📺',pod:'🎧'},N={book:'Book',movie:'Movie',tv:'TV show',pod:'Podcast'};let selected='2026-09-10',shown=new Date(2026,8,1),ft='all',st='movie',sf='All',bf='All',pf='All',ht='all';const seed={items:[{id:'b1',type:'book',title:'Harry Potter',creator:'J.K. Rowling',genre:'Fantasy, Young Adult',status:'Reading',rating:4,total:400,current:135,notes:'I love the world building.',favorite:true},{id:'m1',type:'movie',title:'Interstellar',creator:'Christopher Nolan',genre:'Sci-fi, Space',status:'Watched',rating:5,total:169,year:'2014',notes:'The score and ending stay with me.',favorite:true},{id:'t1',type:'tv',title:'Friends',creator:'',genre:'Comedy',status:'Watching',rating:4,total:32,current:18,notes:'Easy and funny at dinner.',favorite:true},{id:'p1',type:'pod',title:'Huberman Lab',creator:'Andrew Huberman',genre:'Health, Science',status:'Listening',rating:4,total:12,current:9,notes:'Practical ideas.',favorite:true}],logs:[{id:'l1',date:'2026-09-10',type:'book',item:'b1',title:'Harry Potter',detail:'p. 102 → p. 135',amount:33},{id:'l2',date:'2026-09-10',type:'tv',item:'t1',title:'Friends',detail:'Season 1 · EP 2, EP 3',eps:2},{id:'l3',date:'2026-09-10',type:'pod',item:'p1',title:'Huberman Lab',detail:'EP102 · Sleep Better'},{id:'l4',date:'2026-09-09',type:'movie',item:'m1',title:'Interstellar',detail:'★★★★★ · First watch'},{id:'l5',date:'2026-09-08',type:'book',item:'b1',title:'Harry Potter',detail:'p. 80 → p. 102',amount:22}],goals:{book:30,movie:50,tv:100,pod:80}};let D=JSON.parse(localStorage.getItem(K)||'null')||seed;let save=()=>localStorage.setItem(K,JSON.stringify(D)),item=id=>D.items.find(x=>x.id===id),date=k=>new Date(k+'T12:00:00'),key=d=>d.toISOString().slice(0,10),status=t=>t==='book'?['All','Want to read','Reading','Read','Paused','Did not finish','Favorites']:t==='movie'?['All','Want to watch','Watched','Favorites']:t==='tv'?['All','Want to watch','Watching','Watched','Paused','Dropped','Favorites']:['All','Want to listen','Listening','Listened','Favorites'];
+function go(id,e){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('on'));e.classList.add('on');fab.style.display=id==='me'?'none':'block';render()}function move(n){shown.setMonth(shown.getMonth()+n);home()}function modeSet(x,e){document.querySelectorAll('#home .seg button').forEach(b=>b.classList.remove('on'));e.classList.add('on');mon.hidden=x==='week';wek.hidden=x==='month'}function pick(k){selected=k;home()}function logrow(x){return `<div class="log"><div class="icon">${I[x.type]}</div><div class="copy"><b>${x.title}</b><span class="sub">${x.detail}</span></div>${x.item?`<button class="fav" onclick="detail('${x.item}')">›</button>`:''}</div>`}function home(){month.textContent=shown.toLocaleDateString('en-US',{month:'long',year:'numeric'});types.innerHTML=['all','book','movie','tv','pod'].map(t=>`<button class="chip ${ft===t?'on':''}" onclick="ft='${t}';home()">${t==='all'?'All':I[t]+' '+N[t]}</button>`).join('');let y=shown.getFullYear(),m=shown.getMonth(),f=(new Date(y,m,1).getDay()+6)%7,l=new Date(y,m+1,0).getDate(),h='';for(let i=0;i<f;i++)h+='<i></i>';for(let n=1;n<=l;n++){let k=`${y}-${String(m+1).padStart(2,'0')}-${String(n).padStart(2,'0')}`,a=D.logs.filter(x=>x.date===k&&(ft==='all'||x.type===ft));h+=`<button class="day ${a.length?'log':''} ${k===selected?'sel':''} ${k==='2026-09-10'?'today':''}" onclick="pick('${k}')">${n}${a.length?'<span class="dots">'+[...new Set(a.map(x=>x.type))].map(t=>'<i class="'+t+'"></i>').join('')+'</span>':''}</button>`}days.innerHTML=h;let a=D.logs.filter(x=>x.date===selected&&(ft==='all'||x.type===ft));daily.innerHTML=a.length?a.map(logrow).join(''):'<div class="empty">Nothing logged for this day.<br><button class="secondary" onclick="logAdd()">Add a record</button></div>';let g={};D.logs.filter(x=>ft==='all'||x.type===ft).forEach(x=>(g[x.date]??=[]).push(x));timeline.innerHTML=Object.entries(g).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,4).map(([d,a])=>`<div><b class="sub" style="padding-top:9px">${date(d).toLocaleDateString('en-US',{month:'long',day:'numeric'})}</b>${a.map(logrow).join('')}</div>`).join('');let s=date(selected);s.setDate(s.getDate()-((s.getDay()+6)%7));weekgrid.innerHTML=Array.from({length:7},(_,i)=>{let d=new Date(s);d.setDate(s.getDate()+i);let a=D.logs.filter(x=>x.date===key(d)&&(ft==='all'||x.type===ft));return `<div class="wd ${a.length?'active':''}"><b>${'MTWTFSS'[i]} ${d.getDate()}</b><div class="mini">${a.map(x=>I[x.type]).join(' ')}</div></div>`}).join('')}
+function filters(t,v,id){document.getElementById(id).innerHTML=status(t).map(x=>`<button class="chip ${v===x||(v==='all'&&x==='All')?'on':''}" onclick="${t==='book'?'bf':t==='pod'?'pf':'sf'}='${x}';lists()">${x}</button>`).join('')}function cards(t,v,id){let a=D.items.filter(x=>x.type===t&&(v==='all'||v==='All'||(v==='Favorites'?x.favorite:x.status===v)));document.getElementById(id).innerHTML=a.length?a.map(x=>{let p=x.total?Math.min(100,Math.round((x.current||0)/x.total*100)):0;return `<article class="card media" onclick="detail('${x.id}')"><div class="cover ${t}c">${I[t]}</div><div class="info"><h3>${x.title}</h3><p>${x.creator||x.genre||'No creator added'}</p>${x.total?`<div class="bar"><i style="width:${p}%"></i></div><p>${x.current||0} / ${x.total}${t==='book'?' pages':t==='tv'?' episodes':t==='pod'?' episodes':' min'}</p>`:`<p>${x.status}</p>`}<span class="heart">${'♥'.repeat(x.rating||0)}${'♡'.repeat(5-(x.rating||0))}</span></div><button class="fav ${x.favorite?'on':''}" onclick="event.stopPropagation();favorite('${x.id}')">${x.favorite?'♥':'♡'}</button></article>`}).join(''):'<div class="empty">No items here yet.</div>'}function lists(){filters('book',bf,'bookchips');cards('book',bf,'booklist');filters(st,sf,'screenchips');cards(st,sf,'screenlist');filters('pod',pf,'podchips');cards('pod',pf,'podlist')}function screenSet(t,e){st=t;sf='All';document.querySelectorAll('#screen .seg button').forEach(x=>x.classList.remove('on'));e.classList.add('on');lists()}function favorite(id){item(id).favorite=!item(id).favorite;save();render()}
+function logAdd(t){modal.classList.add('show');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Add a record</h2><p class="sub">${date(selected).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</p><div class="chips">${(t?[t]:['book','movie','tv','pod']).map(x=>`<button class="chip on" onclick="logForm('${x}')">${I[x]} ${N[x]}</button>`).join('')}</div>`}function logForm(t){let opts=D.items.filter(x=>x.type===t).map(x=>`<option value="${x.id}">${x.title}</option>`).join('');let fields=t==='book'?'<label>Start page</label><input class="field" id="a" type="number"><label>End page</label><input class="field" id="b" type="number">':t==='tv'?'<label>Episodes watched</label><div class="check" id="eps">'+Array.from({length:12},(_,i)=>`<button type="button" onclick="this.classList.toggle('on')">EP ${i+1}</button>`).join('')+'</div>':'<label>Entry note</label><input class="field" id="note" placeholder="Episode, viewing note, etc.">';sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Log ${N[t]}</h2><label>Choose item</label><select class="field" id="li">${opts}<option value="">Other / not added yet</option></select><label>Title for a new item</label><input class="field" id="lt" placeholder="Title">${fields}<label>Date</label><input class="field" id="ld" type="date" value="${selected}"><button class="save" onclick="logSave('${t}')">Save record</button>`}function logSave(t){let id=li.value,x=item(id),title=x?.title||lt.value||'Untitled',detail='',amount=0,eps=0;if(t==='book'){amount=Math.max(0,(+b.value||0)-(+a.value||0));detail=`p. ${a.value||0} → p. ${b.value||0}`;if(x)x.current=Math.max(x.current||0,+b.value||0)}else if(t==='tv'){eps=document.querySelectorAll('#eps .on').length;detail=`Season 1 · ${[...document.querySelectorAll('#eps .on')].map(x=>x.textContent).join(', ')||'episode not specified'}`;if(x)x.current=(x.current||0)+eps}else detail=note?.value||'Logged';D.logs.unshift({id:'l'+Date.now(),date:ld.value,type:t,item:id,title,detail,amount,eps});selected=ld.value;save();closeM();render()}
+function itemEdit(t,id){let x=id?item(id):{type:t,title:'',creator:'',genre:'',status:status(t)[1],rating:0,total:'',current:'',notes:''};let total=t==='book'?'Total pages':t==='movie'?'Runtime (minutes)':'Episodes planned';modal.classList.add('show');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>${id?'Edit':'Add'} ${N[t]}</h2><label>Title *</label><input class="field" id="title" value="${x.title}"><label>${t==='movie'?'Director':t==='pod'?'Host':'Author / creator'}</label><input class="field" id="creator" value="${x.creator||''}"><label>Tags (comma separated)</label><input class="field" id="genre" value="${x.genre||''}" placeholder="Fantasy, Comfort"><label>Status</label><select class="field" id="state">${status(t).slice(1,-1).map(s=>`<option ${x.status===s?'selected':''}>${s}</option>`).join('')}</select><label>Rating</label><select class="field" id="rating">${[0,1,2,3,4,5].map(n=>`<option value="${n}" ${+x.rating===n?'selected':''}>${n?'♥'.repeat(n):'Not rated'}</option>`).join('')}</select><label>${total}</label><input class="field" id="total" type="number" value="${x.total||''}">${t!=='movie'?'<label>Current progress</label><input class="field" id="current" type="number" value="'+(x.current||'')+'">':''}<label>Notes</label><textarea class="field" id="notes">${x.notes||''}</textarea>${t==='book'?'<button class="secondary" onclick="window.open(\'https://www.goodreads.com/search?q=\'+encodeURIComponent(title.value),\'_blank\')">Search Goodreads</button>':''}<button class="save" onclick="itemSave('${t}','${id||''}')">Save ${N[t]}</button>${id?'<button class="secondary" onclick="itemDelete(\''+id+'\')">Delete</button>':''}`}
+function itemSave(t,id){let x=id?item(id):{id:t[0]+Date.now(),type:t,favorite:false};Object.assign(x,{title:title.value||'Untitled',creator:creator.value,genre:genre.value,status:state.value,rating:+rating.value,total:+total.value||0,current:+(current?.value||0),notes:notes.value});if(!id)D.items.unshift(x);save();closeM();render()}function itemDelete(id){if(confirm('Delete this item?')){D.items=D.items.filter(x=>x.id!==id);save();closeM();render()}}function detail(id){let x=item(id);if(!x)return;let p=x.total?Math.min(100,Math.round((x.current||0)/x.total*100)):0,a=D.logs.filter(l=>l.item===id);modal.classList.add('show');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>${x.title}</h2><p class="sub">${x.creator||x.genre}</p><div class="bar"><i style="width:${p}%"></i></div><div class="row"><span class="sub">${x.current||0} / ${x.total||'—'} progress</span><span class="heart">${'♥'.repeat(x.rating||0)}${'♡'.repeat(5-(x.rating||0))}</span></div><p>${x.notes||'No notes yet.'}</p><h3>Journal entries</h3><div class="logs">${a.length?a.map(logrow).join(''):'<p class="sub">No entries yet.</p>'}</div><button class="secondary" onclick="logAdd('${x.type}')">Add a record</button><button class="save" onclick="itemEdit('${x.type}','${x.id}')">Edit ${N[x.type]}</button>`}function closeM(){modal.classList.remove('show')}modal.onclick=e=>{if(e.target===modal)closeM()};
+function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.filter(x=>x.type==='book').reduce((a,x)=>a+(x.amount||0),0),eps=D.logs.filter(x=>x.type==='tv').reduce((a,x)=>a+(x.eps||0),0);stats.innerHTML=`<div class="stat"><span>📚 Pages logged</span><b>${pages}</b></div><div class="stat"><span>🎬 Movies</span><b>${count('movie')}</b></div><div class="stat"><span>📺 Episodes</span><b>${eps}</b></div><div class="stat"><span>🎧 Episodes</span><b>${count('pod')}</b></div>`;goals.innerHTML=['book','movie','tv','pod'].map(t=>{let n=t==='tv'?eps:D.items.filter(x=>x.type===t&&['Read','Watched','Listened'].includes(x.status)).length,g=D.goals[t];return `<div class="goal"><div class="goalline"><span>${I[t]} ${N[t]} goal</span><b>${n} / ${g}</b></div><div class="bar"><i style="width:${Math.min(100,n/g*100)}%"></i></div></div>`}).join('');let c={};D.logs.filter(x=>ht==='all'||x.type===ht).forEach(x=>c[x.date]=(c[x.date]||0)+1);heat.innerHTML=Array.from({length:70},(_,i)=>{let d=new Date(2026,6,3+i),n=c[key(d)]||0;return `<i class="${n>2?'c':n>1?'b':n?'a':''}"></i>`}).join('');wrap.innerHTML=`<div class="statgrid"><div class="stat"><span>Items tracked</span><b>${D.items.length}</b></div><div class="stat"><span>Favorites</span><b>${D.items.filter(x=>x.favorite).length}</b></div><div class="stat"><span>Journal days</span><b>${Object.keys(c).length}</b></div><div class="stat"><span>Entries</span><b>${D.logs.length}</b></div></div>`}function heatToggle(){let a=['all','book','movie','tv','pod'];ht=a[(a.indexOf(ht)+1)%a.length];heatlabel.textContent=ht==='all'?'All':N[ht];mine()}function goalEdit(){modal.classList.add('show');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit yearly goals</h2>${['book','movie','tv','pod'].map(t=>`<label>${I[t]} ${N[t]}</label><input class="field" id="g${t}" type="number" value="${D.goals[t]}">`).join('')}<button class="save" onclick="goalSave()">Save goals</button>`}function goalSave(){['book','movie','tv','pod'].forEach(t=>D.goals[t]=+document.getElementById('g'+t).value||0);save();closeM();mine()}function searchOpen(){search.classList.add('show');q.focus();searchRun()}function searchClose(){search.classList.remove('show')}function searchRun(){let v=q.value.toLowerCase(),a=D.items.filter(x=>!v||Object.values(x).join(' ').toLowerCase().includes(v));results.innerHTML=a.length?a.map(x=>`<div class="log" onclick="searchClose();detail('${x.id}')"><div class="icon">${I[x.type]}</div><div class="copy"><b>${x.title}</b><span class="sub">${x.creator||x.genre}</span></div></div>`).join(''):'<div class="empty">No matching items.</div>'}function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}));a.download='media-journal.json';a.click()}function render(){home();lists();mine()}render();
+</script><style>
+  /* Refined from browser feedback */
+  .wd{min-height:132px;padding-top:9px}.mini{display:flex;justify-content:center;gap:3px;margin-top:11px}.mini i{width:6px;height:6px;border-radius:50%}
+  .media .cover{display:none}
+</style><script>
+  /* Keep media filters text-only and make the longer week cells use dots. */
+  const baseHome=home;
+  home=function(){
+    baseHome();
+    const names=['All','Book','Movie','TV show','Podcast'];
+    document.querySelectorAll('#types .chip').forEach((button,index)=>button.textContent=names[index]);
+    document.querySelectorAll('.wd .mini').forEach(box=>{
+      const types=[...box.textContent].map(symbol=>({ '📚':'book','🎬':'movie','📺':'tv','🎧':'pod' }[symbol])).filter(Boolean);
+      box.innerHTML=[...new Set(types)].map(type=>'<i class="'+type+'"></i>').join('');
+    });
+  };
+  /* Dates make an item's activity history scannable at a glance. */
+  logrow=function(entry){
+    return `<div class="log"><div class="icon">${I[entry.type]}</div><div class="copy"><b>${entry.title}</b><span class="sub">${date(entry.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ${entry.detail}</span></div>${entry.item?`<button class="fav" onclick="detail('${entry.item}')">›</button>`:''}</div>`;
+  };
+  document.querySelector('.bottom button:nth-of-type(3)').innerHTML='<i>◐</i>TV / Movie';
+  home();
+</script><script>
+  const originalDetail=detail;
+  detail=function(id){
+    originalDetail(id);
+    const entries=D.logs.filter(entry=>entry.item===id);
+    document.querySelectorAll('#sheet .logs .log .sub').forEach((line,index)=>{
+      const entry=entries[index];
+      if(entry) line.textContent=`${date(entry.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})} · ${entry.detail}`;
+    });
+  };
+</script><script>
+  /* Text-only media cards: no icon or cover block in any media section. */
+  cards=function(type,activeFilter,targetId){
+    const records=D.items.filter(record=>record.type===type&&(activeFilter==='all'||activeFilter==='All'||(activeFilter==='Favorites'?record.favorite:record.status===activeFilter)));
+    document.getElementById(targetId).innerHTML=records.length?records.map(record=>{
+      const progress=record.total?Math.min(100,Math.round((record.current||0)/record.total*100)):0;
+      const unit=type==='book'?' pages':type==='tv'?' episodes':type==='pod'?' episodes':' min';
+      return `<article class="card media" onclick="detail('${record.id}')"><div class="info"><h3>${record.title}</h3><p>${record.creator||record.genre||'No creator added'}</p>${record.total?`<div class="bar"><i style="width:${progress}%"></i></div><p>${record.current||0} / ${record.total}${unit}</p>`:`<p>${record.status}</p>`}<span class="heart">${'♥'.repeat(record.rating||0)}${'♡'.repeat(5-(record.rating||0))}</span></div><button class="fav ${record.favorite?'on':''}" onclick="event.stopPropagation();favorite('${record.id}')">${record.favorite?'♥':'♡'}</button></article>`;
+    }).join(''):'<div class="empty">No items here yet.</div>';
+  };
+  lists();
+</script><style>
+  /* Keep the week view visually separate from the type filters. */
+  #wek .weekgrid{margin-top:18px}
+  .wd{cursor:pointer}
+</style><script>
+  /* Home logs stay compact; dates belong to an item's detailed history only. */
+  logrow=function(entry){
+    return `<div class="log"><div class="icon">${I[entry.type]}</div><div class="copy"><b>${entry.title}</b><span class="sub">${entry.detail}</span></div>${entry.item?`<button class="fav" onclick="detail('${entry.item}')">›</button>`:''}</div>`;
+  };
+
+  /* A week cell is an alternate way to select a day and inspect its log. */
+  const homeWithTextFilters=home;
+  home=function(){
+    homeWithTextFilters();
+    const weekStart=date(selected); weekStart.setDate(weekStart.getDate()-((weekStart.getDay()+6)%7));
+    document.querySelectorAll('.wd').forEach((cell,index)=>{
+      const cellDate=new Date(weekStart); cellDate.setDate(weekStart.getDate()+index);
+      cell.onclick=()=>{ selected=key(cellDate); home(); };
+    });
+  };
+
+  /* Use star ratings consistently in cards, detail views and item forms. */
+  const cardsWithoutCover=cards;
+  cards=function(type,activeFilter,targetId){
+    const records=D.items.filter(record=>record.type===type&&(activeFilter==='all'||activeFilter==='All'||(activeFilter==='Favorites'?record.favorite:record.status===activeFilter)));
+    document.getElementById(targetId).innerHTML=records.length?records.map(record=>{
+      const progress=record.total?Math.min(100,Math.round((record.current||0)/record.total*100)):0;
+      const unit=type==='book'?' pages':type==='tv'?' episodes':type==='pod'?' episodes':' min';
+      const summary=type==='pod'
+        ? `<p>Listened: ${record.current||0} episodes</p>`
+        : record.total?`<div class="bar"><i style="width:${progress}%"></i></div><p>${record.current||0} / ${record.total}${unit}</p>`:`<p>${record.status}</p>`;
+      return `<article class="card media" onclick="detail('${record.id}')"><div class="info"><h3>${record.title}</h3><p>${record.creator||record.genre||'No creator added'}</p>${summary}<span class="heart">${'★'.repeat(record.rating||0)}${'☆'.repeat(5-(record.rating||0))}</span></div><button class="fav ${record.favorite?'on':''}" onclick="event.stopPropagation();favorite('${record.id}')">${record.favorite?'♥':'♡'}</button></article>`;
+    }).join(''):'<div class="empty">No items here yet.</div>';
+  };
+  const originalDetailWithDates=detail;
+  detail=function(id){
+    originalDetailWithDates(id);
+    const record=item(id);
+    document.querySelectorAll('#sheet .heart').forEach(node=>node.textContent=node.textContent.replaceAll('♥','★').replaceAll('♡','☆'));
+    if(record?.type==='pod'){
+      document.querySelector('#sheet .bar')?.remove();
+      const progressLine=document.querySelector('#sheet .row .sub');
+      if(progressLine) progressLine.textContent=`Listened: ${record.current||0} episodes`;
+    }
+  };
+  const originalItemEdit=itemEdit;
+  itemEdit=function(type,id){
+    originalItemEdit(type,id);
+    [...document.querySelectorAll('#sheet select#rating option')].forEach(option=>option.textContent=option.textContent.replaceAll('♥','★'));
+    document.querySelectorAll('#sheet button').forEach(button=>{ if(button.textContent.includes('Search Goodreads')) button.remove(); });
+  };
+
+  /* Podcasts grow indefinitely: each log is a separate episode with its own metadata. */
+  const originalLogForm=logForm;
+  logForm=function(type){
+    if(type!=='pod') return originalLogForm(type);
+    const channels=D.items.filter(record=>record.type==='pod').map(record=>`<option value="${record.id}">${record.title}</option>`).join('');
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Add podcast episode</h2><label>Podcast channel</label><select class="field" id="podChannel">${channels}</select><label>Episode title *</label><input class="field" id="podTitle" placeholder="Sleep Better"><label>Episode number</label><input class="field" id="podNumber" placeholder="EP102"><label>Duration</label><input class="field" id="podDuration" placeholder="1h 45m"><label>Status</label><select class="field" id="podStatus"><option>Want to listen</option><option>Listening</option><option selected>Listened</option></select><label>Started on</label><input class="field" id="podStart" type="date" value="${selected}"><label>Finished on</label><input class="field" id="podEnd" type="date" value="${selected}"><label>Listening progress</label><select class="field" id="podProgress"><option value="25">25%</option><option value="50">50%</option><option value="75">75%</option><option value="100" selected>100%</option></select><label>Rating</label><select class="field" id="podRating"><option value="0">Not rated</option><option value="1">★</option><option value="2">★★</option><option value="3">★★★</option><option value="4">★★★★</option><option value="5">★★★★★</option></select><label>Review</label><textarea class="field" id="podReview" placeholder="Optional notes"></textarea><button class="save" onclick="savePodcastEpisode()">Save episode</button>`;
+  };
+  function savePodcastEpisode(){
+    const channel=item(podChannel.value);
+    const title=podTitle.value.trim()||'Untitled episode';
+    const number=podNumber.value.trim();
+    const state=podStatus.value;
+    const progress=+podProgress.value;
+    const detail=`${number?number+' · ':''}${title} · ${state}${podDuration.value.trim()?' · '+podDuration.value.trim():''}`;
+    D.logs.unshift({id:'l'+Date.now(),date:podEnd.value||podStart.value,type:'pod',item:channel?.id||'',title:channel?.title||'Podcast',detail,episodeTitle:title,episodeNumber:number,duration:podDuration.value.trim(),status:state,startDate:podStart.value,endDate:podEnd.value,progress,rating:+podRating.value,review:podReview.value.trim()});
+    if(channel && state==='Listened') channel.current=(channel.current||0)+1;
+    selected=podEnd.value||podStart.value; save(); closeM(); render();
+  }
+  home(); lists();
+</script><style>
+  /* Calendar records: number on top, type dots directly below it. */
+  .days .day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:6px}
+  .days .day .dots{display:flex!important;width:100%;justify-content:center;gap:3px;margin-top:5px;line-height:0}
+  .days .day .dots i{display:block;flex:0 0 5px;width:5px;height:5px}
+</style><style>
+  #wek .wd{min-height:92px}
+</style><script>
+  const homeWithShortWeek=home;
+  home=function(){
+    homeWithShortWeek();
+    const weekdayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    document.querySelectorAll('.wd b').forEach((label,index)=>{
+      const dayNumber=label.textContent.match(/\d+/)?.[0]||'';
+      label.textContent=`${weekdayNames[index]} ${dayNumber}`;
+    });
+  };
+  home();
+</script><script>
+  /* Individual activity records open as their own editable detail sheets. */
+  const detailWithEntryLinks=detail;
+  detail=function(id){
+    detailWithEntryLinks(id);
+    const entries=D.logs.filter(entry=>entry.item===id);
+    document.querySelectorAll('#sheet .logs .log').forEach((row,index)=>{
+      const entry=entries[index];
+      if(!entry) return;
+      row.style.cursor='pointer';
+      row.onclick=()=>entryDetail(entry.id);
+      row.querySelector('button')?.replaceWith(Object.assign(document.createElement('button'),{className:'fav',textContent:'›',onclick:event=>{event.stopPropagation();entryDetail(entry.id)}}));
+    });
+  };
+  function entryDetail(entryId){
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry) return;
+    modal.classList.add('show');
+    const typeName=N[entry.type];
+    const extra=entry.type==='pod'
+      ? `<div class="row"><span class="sub">Episode</span><b>${entry.episodeNumber||'—'} ${entry.episodeTitle||''}</b></div><div class="row"><span class="sub">Duration</span><b>${entry.duration||'—'}</b></div><div class="row"><span class="sub">Status</span><b>${entry.status||'—'}</b></div><div class="row"><span class="sub">Listening progress</span><b>${entry.progress||'—'}${entry.progress?'%':''}</b></div><div class="row"><span class="sub">Started</span><b>${entry.startDate?date(entry.startDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—'}</b></div><p>${entry.review||'No review yet.'}</p>`
+      : `<p>${entry.detail}</p>`;
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">${typeName.toUpperCase()} RECORD</span><h2>${entry.type==='pod'?(entry.episodeTitle||entry.detail):entry.title}</h2><p class="sub">${date(entry.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</p><div class="card" style="padding:14px;margin-top:16px">${extra}</div><button class="save" onclick="entryEdit('${entry.id}')">Edit record</button>`;
+  }
+  function entryEdit(entryId){
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry) return;
+    const podFields=entry.type==='pod'
+      ? `<label>Episode title</label><input class="field" id="etitle" value="${entry.episodeTitle||''}"><label>Episode number</label><input class="field" id="enumber" value="${entry.episodeNumber||''}"><label>Duration</label><input class="field" id="eduration" value="${entry.duration||''}"><label>Status</label><select class="field" id="estatus"><option ${entry.status==='Want to listen'?'selected':''}>Want to listen</option><option ${entry.status==='Listening'?'selected':''}>Listening</option><option ${entry.status==='Listened'?'selected':''}>Listened</option></select><label>Started on</label><input class="field" id="estart" type="date" value="${entry.startDate||entry.date}"><label>Finished on</label><input class="field" id="eend" type="date" value="${entry.endDate||entry.date}"><label>Listening progress</label><select class="field" id="eprogress">${[25,50,75,100].map(value=>`<option value="${value}" ${+entry.progress===value?'selected':''}>${value}%</option>`).join('')}</select><label>Rating</label><select class="field" id="erating">${[0,1,2,3,4,5].map(value=>`<option value="${value}" ${+entry.rating===value?'selected':''}>${value?'★'.repeat(value):'Not rated'}</option>`).join('')}</select><label>Review</label><textarea class="field" id="ereview">${entry.review||''}</textarea>`
+      : `<label>Record title</label><input class="field" id="etitle" value="${entry.title}"><label>Record details</label><textarea class="field" id="edetail">${entry.detail}</textarea>`;
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit ${N[entry.type]} record</h2><label>Date</label><input class="field" id="edate" type="date" value="${entry.date}">${podFields}<button class="save" onclick="entrySave('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+  }
+  function entrySave(entryId){
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry) return;
+    entry.date=edate.value;
+    if(entry.type==='pod'){
+      entry.episodeTitle=etitle.value.trim(); entry.episodeNumber=enumber.value.trim(); entry.duration=eduration.value.trim(); entry.status=estatus.value; entry.startDate=estart.value; entry.endDate=eend.value; entry.progress=+eprogress.value; entry.rating=+erating.value; entry.review=ereview.value.trim();
+      entry.detail=`${entry.episodeNumber?entry.episodeNumber+' · ':''}${entry.episodeTitle||'Untitled episode'} · ${entry.status}${entry.duration?' · '+entry.duration:''}`;
+    }else{ entry.title=etitle.value.trim()||'Untitled'; entry.detail=edetail.value.trim()||'No details'; }
+    save(); closeM(); render();
+  }
+  function entryDelete(entryId){
+    if(!confirm('Delete this record?')) return;
+    D.logs=D.logs.filter(record=>record.id!==entryId); save(); closeM(); render();
+  }
+</script><style>
+  .days .day{position:relative}
+  .days .day .dots{position:absolute;top:28px;left:0;margin:0}
+</style><script>
+  /* Reading records use page-number fields rather than free-form text. */
+  const genericEntryEdit=entryEdit;
+  entryEdit=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);
+    if(!entry || entry.type!=='book') return genericEntryEdit(entryId);
+    const pages=entry.detail.match(/p\.\s*(\d+)\s*→\s*p\.\s*(\d+)/i)||[];
+    const startPage=pages[1]||0, endPage=pages[2]||0;
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit reading record</h2><label>Date</label><input class="field" id="bookDate" type="date" value="${entry.date}"><label>Start page</label><input class="field" id="bookStart" type="number" min="0" value="${startPage}"><label>End page</label><input class="field" id="bookEnd" type="number" min="0" value="${endPage}"><button class="save" onclick="saveBookEntry('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+  };
+  function saveBookEntry(entryId){
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry) return;
+    const start=Math.max(0,+bookStart.value||0), end=Math.max(start,+bookEnd.value||0);
+    entry.date=bookDate.value; entry.amount=end-start; entry.detail=`p. ${start} → p. ${end}`;
+    const book=item(entry.item); if(book) book.current=Math.max(book.current||0,end);
+    save(); closeM(); render();
+  }
+</script><style>
+  .episode-card{margin-top:18px;padding:16px!important;background:#fffefa}.episode-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0}.episode-meta div{padding:10px;border-radius:12px;background:#f2f3ee}.episode-meta span{display:block;color:var(--mut);font-size:11px;margin-bottom:3px}.episode-meta b{font-size:14px;word-break:break-word}.episode-review{border-top:1px solid var(--line);padding-top:13px;color:var(--ink);line-height:1.5}
+</style><script>
+  const detailWithEpisodePreview=entryDetail;
+  entryDetail=function(entryId){const entry=D.logs.find(record=>record.id===entryId);if(!entry||entry.type!=='pod')return detailWithEpisodePreview(entryId);const duration=entry.duration?`${entry.duration} min`:'—';modal.classList.add('show');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">PODCAST EPISODE</span><h2>${entry.episodeTitle||entry.detail||'Untitled episode'}</h2><p class="sub">${entry.title} · ${date(entry.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</p><div class="card episode-card"><div class="episode-meta"><div><span>EPISODE</span><b>${entry.episodeNumber||'—'}</b></div><div><span>DURATION</span><b>${duration}</b></div><div><span>STATUS</span><b>${entry.status||'—'}</b></div><div><span>RATING</span><b class="heart">${'★'.repeat(entry.rating||0)}${'☆'.repeat(5-(entry.rating||0))}</b></div><div><span>STARTED</span><b>${entry.startDate?date(entry.startDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—'}</b></div><div><span>FINISHED</span><b>${entry.endDate?date(entry.endDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—'}</b></div></div><div class="episode-review"><span class="ey">REVIEW</span><p>${entry.review||'No review yet.'}</p></div></div><button class="save" onclick="entryEdit('${entry.id}')">Edit episode</button>`};
+  const entryEditWithoutProgress=entryEdit;
+  entryEdit=function(entryId){const entry=D.logs.find(record=>record.id===entryId);if(!entry||entry.type!=='pod')return entryEditWithoutProgress(entryId);sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit podcast episode</h2><label>Episode title</label><input class="field" id="ptitle" value="${entry.episodeTitle||''}"><label>Episode number</label><input class="field" id="pnumber" value="${entry.episodeNumber||''}"><label>Duration (minutes)</label><input class="field" id="pduration" type="number" min="0" value="${entry.duration||''}"><label>Status</label><select class="field" id="pstatus"><option ${entry.status==='Want to listen'?'selected':''}>Want to listen</option><option ${entry.status==='Listening'?'selected':''}>Listening</option><option ${entry.status==='Listened'?'selected':''}>Listened</option></select><label>Started on</label><input class="field" id="pstart" type="date" value="${entry.startDate||entry.date}"><label>Finished on</label><input class="field" id="pend" type="date" value="${entry.endDate||entry.date}"><label>Rating</label><select class="field" id="prating">${[0,1,2,3,4,5].map(value=>`<option value="${value}" ${+entry.rating===value?'selected':''}>${value?'★'.repeat(value):'Not rated'}</option>`).join('')}</select><label>Review</label><textarea class="field" id="preview">${entry.review||''}</textarea><button class="save" onclick="savePodcastEntryEdit('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`};
+  function savePodcastEntryEdit(entryId){const entry=D.logs.find(record=>record.id===entryId);if(!entry)return;entry.episodeTitle=ptitle.value.trim()||'Untitled episode';entry.episodeNumber=pnumber.value.trim();entry.duration=pduration.value;entry.status=pstatus.value;entry.startDate=pstart.value;entry.endDate=pend.value;entry.date=pend.value||pstart.value;entry.rating=+prating.value;entry.review=preview.value.trim();entry.detail=`${entry.episodeNumber?entry.episodeNumber+' · ':''}${entry.episodeTitle} · ${entry.status}${entry.duration?' · '+entry.duration+' min':''}`;save();closeM();render()}
+  const podcastFormWithUnits=logForm;
+  logForm=function(type){podcastFormWithUnits(type);if(type==='pod'){const durationField=document.getElementById('podDuration');durationField.type='number';durationField.min='0';durationField.previousElementSibling.textContent='Duration (minutes)';document.getElementById('podProgress')?.previousElementSibling?.remove();document.getElementById('podProgress')?.remove();}};
+</script><style>
+  :root{--bg:#fbf5ef;--paper:#fffdf9;--pale:#e7d9ce;--line:#eadfd5;--accent:#718f8a;--sage:#a9bdb7;--mut:#76817c}
+  body{background:linear-gradient(135deg,#dfe6df 0%,#efdeda 48%,#d8d3c8 100%)}
+  .seg{background:#f2e9e1}.chip{background:#f3eee8}.chip.on{background:#a5bbb6}.arrow{background:#e8d9cf}
+  .day.log{background:#f2dfd4}.day.sel{background:#718f8a}.wd{background:#f5f0ea}.wd.active{background:#e4ebdc}
+  .stat{background:#f5eee7}.episode-meta div{background:#f4ede7}.secondary{background:#e4eadd;color:#4d6f69}
+  .heart{color:#c98883}.fav.on{color:#c98883}
+</style><style>
+  .nav svg{width:21px;height:21px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .nav i{height:22px;display:grid;place-items:center}
+</style><script>
+  const navIcons=[
+    '<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-6h6v6"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 5.5A3.5 3.5 0 0 1 7.5 2H20v17H7.5A3.5 3.5 0 0 0 4 22z"/><path d="M4 5.5V22"/><path d="M8 6h8"/></svg>',
+    '<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="m7 5 2 4-2 4 2 4M17 5l-2 4 2 4-2 4"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M4 12v4a2 2 0 0 0 2 2h1v-7H6a2 2 0 0 0-2 1zM20 12v4a2 2 0 0 1-2 2h-1v-7h1a2 2 0 0 1 2 1z"/><path d="M16 20c-1 1-3 1-4 1"/></svg>',
+    '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c1-5 4-7 8-7s7 2 8 7"/></svg>'
+  ];
+  document.querySelectorAll('.nav').forEach((button,index)=>{
+    const text=button.textContent.trim();
+    button.innerHTML=`<i>${navIcons[index]}</i>${text.replace(/^[^A-Za-z]+/,'')}`;
+  });
+</script><script>
+  document.querySelector('.bottom button:nth-of-type(2) i').textContent='📖';
+  document.querySelector('.bottom button:nth-of-type(3) i').textContent='📺';
+</script><script>
+  const bookNavIcon='<svg viewBox="0 0 24 24"><path d="M3.5 5.5c2.6-1.4 5.4-1.2 8.5.7v14c-3.1-1.9-5.9-2.1-8.5-.7z"/><path d="M20.5 5.5c-2.6-1.4-5.4-1.2-8.5.7v14c3.1-1.9 5.9-2.1 8.5-.7z"/></svg>';
+  const tvNavIcon='<svg viewBox="0 0 24 24"><path d="m8 3 4 4 4-4"/><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 22h6"/></svg>';
+  document.querySelector('.bottom button:nth-of-type(2) i').innerHTML=bookNavIcon;
+  document.querySelector('.bottom button:nth-of-type(3) i').innerHTML=tvNavIcon;
+</script></body></html>
