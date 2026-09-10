@@ -441,4 +441,17 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     save(); closeM(); render();
     if(channelId) setTimeout(()=>detail(channelId),0);
   };
+</script><script>
+  /* A podcast channel lists episode titles; home timelines keep channel names. */
+  const detailWithPodcastEpisodeTitles=detail;
+  detail=function(id){
+    detailWithPodcastEpisodeTitles(id);
+    const channel=item(id);
+    if(channel?.type!=='pod') return;
+    const episodes=D.logs.filter(entry=>entry.item===id);
+    document.querySelectorAll('#sheet .logs .log .copy b').forEach((title,index)=>{
+      const episode=episodes[index];
+      if(episode?.episodeTitle) title.textContent=episode.episodeTitle;
+    });
+  };
 </script></body></html>
