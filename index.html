@@ -341,4 +341,84 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
       return `<button type="button" class="${episode===watched+1?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
     }).join('');
   }
+</script><script>
+  /* Contextual logging: item details go straight to the matching form. */
+  let activeRecordItem=null;
+  const detailWithContext=detail;
+  detail=function(id){ activeRecordItem=id; detailWithContext(id); };
+  const logAddWithChooser=logAdd;
+  logAdd=function(type){
+    if(!type){ activeRecordItem=null; return logAddWithChooser(); }
+    logForm(type);
+    setTimeout(()=>selectContextItem(type),0);
+  };
+  function selectContextItem(type){
+    if(!activeRecordItem) return;
+    const select=type==='pod'?document.getElementById('podChannel'):document.getElementById('li');
+    if(select && [...select.options].some(option=>option.value===activeRecordItem)){
+      select.value=activeRecordItem;
+      if(type==='tv') renderTvEpisodes();
+    }
+  }
+  function keepRecordForm(type,itemId){
+    modal.classList.add('show');
+    logForm(type);
+    setTimeout(()=>{
+      const select=type==='pod'?document.getElementById('podChannel'):document.getElementById('li');
+      if(select && itemId && [...select.options].some(option=>option.value===itemId)){
+        select.value=itemId;
+        if(type==='tv') renderTvEpisodes();
+      }
+    },0);
+  }
+  const saveLogAndContinue=logSave;
+  logSave=function(type){
+    const itemId=document.getElementById('li')?.value||activeRecordItem;
+    saveLogAndContinue(type);
+    keepRecordForm(type,itemId);
+  };
+  const savePodcastAndContinue=savePodcastEpisode;
+  savePodcastEpisode=function(){
+    const itemId=document.getElementById('podChannel')?.value||activeRecordItem;
+    savePodcastAndContinue();
+    keepRecordForm('pod',itemId);
+  };
+</script><script>
+  /* Book records begin from the saved reading position. */
+  const formWithBookStart=logForm;
+  logForm=function(type){
+    formWithBookStart(type);
+    if(type!=='book') return;
+    const bookSelect=document.getElementById('li');
+    const fillStart=()=>{
+      const book=item(bookSelect.value);
+      const start=document.getElementById('a');
+      if(book && start) start.value=book.current||0;
+    };
+    bookSelect.addEventListener('change',fillStart);
+    fillStart();
+  };
+  const selectContextWithBookStart=selectContextItem;
+  selectContextItem=function(type){
+    selectContextWithBookStart(type);
+    if(type==='book'){
+      const book=item(document.getElementById('li')?.value);
+      const start=document.getElementById('a');
+      if(book && start) start.value=book.current||0;
+    }
+  };
+
+  /* After saving, return to the item detail that opened the record form. */
+  const saveRecordThenReturn=logSave;
+  logSave=function(type){
+    const itemId=document.getElementById('li')?.value||activeRecordItem;
+    saveRecordThenReturn(type);
+    if(itemId) setTimeout(()=>detail(itemId),0);
+  };
+  const savePodcastThenReturn=savePodcastEpisode;
+  savePodcastEpisode=function(){
+    const itemId=document.getElementById('podChannel')?.value||activeRecordItem;
+    savePodcastThenReturn();
+    if(itemId) setTimeout(()=>detail(itemId),0);
+  };
 </script></body></html>
