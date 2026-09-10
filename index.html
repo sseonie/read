@@ -421,4 +421,24 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     savePodcastThenReturn();
     if(itemId) setTimeout(()=>detail(itemId),0);
   };
+</script><script>
+  /* Podcast episodes do not use a listening-progress field. */
+  savePodcastEpisode=function(){
+    const channelId=document.getElementById('podChannel')?.value||activeRecordItem;
+    const channel=item(channelId);
+    const episodeTitle=document.getElementById('podTitle').value.trim()||'Untitled episode';
+    const episodeNumber=document.getElementById('podNumber').value.trim();
+    const duration=document.getElementById('podDuration').value.trim();
+    const status=document.getElementById('podStatus').value;
+    const startedOn=document.getElementById('podStart').value;
+    const finishedOn=document.getElementById('podEnd').value;
+    const rating=+document.getElementById('podRating').value;
+    const review=document.getElementById('podReview').value.trim();
+    const detail=`${episodeNumber?episodeNumber+' · ':''}${episodeTitle} · ${status}${duration?' · '+duration+' min':''}`;
+    D.logs.unshift({id:'l'+Date.now(),date:finishedOn||startedOn,type:'pod',item:channelId,title:channel?.title||'Podcast',detail,episodeTitle,episodeNumber,duration,status,startDate:startedOn,endDate:finishedOn,rating,review});
+    if(channel && status==='Listened') channel.current=(channel.current||0)+1;
+    selected=finishedOn||startedOn;
+    save(); closeM(); render();
+    if(channelId) setTimeout(()=>detail(channelId),0);
+  };
 </script></body></html>
