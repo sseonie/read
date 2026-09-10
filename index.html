@@ -454,4 +454,56 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
       if(episode?.episodeTitle) title.textContent=episode.episodeTitle;
     });
   };
+</script><style>
+  .sheet-back{float:left;background:transparent;color:#547873;font-size:13px;padding:7px 0;margin-bottom:12px}
+</style><script>
+  /* Clear navigation hierarchy for every media and record detail sheet. */
+  const detailWithBackControl=detail;
+  detail=function(id){
+    detailWithBackControl(id);
+    const back=document.createElement('button');
+    back.className='sheet-back'; back.textContent='← Back'; back.onclick=closeM;
+    document.getElementById('sheet').prepend(back);
+  };
+  const entryDetailWithBackControl=entryDetail;
+  entryDetail=function(entryId){
+    entryDetailWithBackControl(entryId);
+    const entry=D.logs.find(record=>record.id===entryId);
+    if(!entry?.item) return;
+    const back=document.createElement('button');
+    back.className='sheet-back'; back.textContent='← Back to details'; back.onclick=()=>detail(entry.item);
+    document.getElementById('sheet').prepend(back);
+  };
+  const detailWithCleanPodcastEntryText=detail;
+  detail=function(id){
+    detailWithCleanPodcastEntryText(id);
+    const channel=item(id);
+    if(channel?.type!=='pod') return;
+    const episodes=D.logs.filter(entry=>entry.item===id);
+    document.querySelectorAll('#sheet .logs .log .copy').forEach((copy,index)=>{
+      const episode=episodes[index];
+      if(!episode?.episodeTitle) return;
+      const info=[episode.episodeNumber,episode.status,episode.duration?episode.duration+' min':''].filter(Boolean).join(' · ');
+      const sub=copy.querySelector('.sub');
+      if(sub) sub.textContent=info || 'Episode details';
+    });
+  };
+</script><style>
+  .sheet{position:relative}.entry-back{position:absolute;left:18px;top:20px;width:31px;height:31px;padding:0;border-radius:50%;background:#f0ebe4;color:#52736e;display:grid;place-items:center}.entry-back svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}.sheet:has(.entry-back) .ey,.sheet:has(.entry-back) h2{margin-left:42px}
+</style><script>
+  /* Item details use their close control; only nested records receive an arrow. */
+  const detailWithoutBackButton=detail;
+  detail=function(id){
+    detailWithoutBackButton(id);
+    document.querySelectorAll('#sheet .sheet-back').forEach(button=>button.remove());
+  };
+  const recordDetailWithArrow=entryDetail;
+  entryDetail=function(entryId){
+    recordDetailWithArrow(entryId);
+    const back=document.querySelector('#sheet .sheet-back');
+    if(!back) return;
+    back.className='entry-back';
+    back.setAttribute('aria-label','Back to details');
+    back.innerHTML='<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';
+  };
 </script></body></html>
