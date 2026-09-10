@@ -3,10 +3,12 @@
 </style><body><main class="app">
 <section id="home" class="view on"><header class="top"><div><span class="ey">MEDIA JOURNAL</span><h1>My journal</h1></div><button class="round" onclick="searchOpen()">⌕</button></header><div class="card cal"><div class="calhead"><button class="arrow" onclick="move(-1)">‹</button><h2 id="month"></h2><button class="arrow" onclick="move(1)">›</button></div><div class="seg"><button class="on" onclick="modeSet('month',this)">Month</button><button onclick="modeSet('week',this)">Week</button></div><div class="chips" id="types"></div><div id="mon"><div class="weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="days" id="days"></div></div><div id="wek" hidden><div id="weekgrid" class="weekgrid"></div></div></div><div class="head"><h2>Daily log</h2><button onclick="logAdd()">+ Add log</button></div><div class="card logs" id="daily"></div><div class="head"><h2>Timeline</h2></div><div class="card logs" id="timeline"></div></section>
 <section id="books" class="view"><header class="top"><div><span class="ey">LIBRARY</span><h1>Books</h1></div><button class="round" onclick="itemEdit('book')">＋</button></header><div class="chips" id="bookchips"></div><div id="booklist"></div></section>
-<section id="screen" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>Screen</h1></div><button class="round" onclick="itemEdit(st)">＋</button></header><div class="seg"><button class="on" onclick="screenSet('movie',this)">Movies</button><button onclick="screenSet('tv',this)">TV shows</button></div><div class="chips" id="screenchips"></div><div id="screenlist"></div></section>
+<section id="screen" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>Screen</h1></div></header><div class="watch-choices"><button class="card watch-choice" onclick="openWatchView('movies')"><span class="watch-choice-icon movie-mark">▶</span><span><b>Movies</b><small>Track films you want to watch or have watched</small></span><i>›</i></button><button class="card watch-choice" onclick="openWatchView('tvshows')"><span class="watch-choice-icon tv-mark">▭</span><span><b>TV shows</b><small>Keep up with episodes and seasons</small></span><i>›</i></button></div></section>
+<section id="movies" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>Movies</h1></div><button class="round" onclick="itemEdit('movie')">＋</button></header><div class="chips" id="moviechips"></div><div id="movielist"></div></section>
+<section id="tvshows" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>TV shows</h1></div><button class="round" onclick="itemEdit('tv')">＋</button></header><div class="chips" id="tvchips"></div><div id="tvlist"></div></section>
 <section id="pods" class="view"><header class="top"><div><span class="ey">LISTENING LOG</span><h1>Podcasts</h1></div><button class="round" onclick="itemEdit('pod')">＋</button></header><div class="chips" id="podchips"></div><div id="podlist"></div></section>
 <section id="me" class="view"><span class="ey">YOUR YEAR</span><h1>My space</h1><div class="head"><h2>This month</h2></div><div class="card" style="padding:15px"><div class="statgrid" id="stats"></div></div><div class="head"><h2>Goals</h2><button onclick="goalEdit()">Edit</button></div><div class="card" id="goals" style="padding:14px"></div><div class="head"><h2>2026 activity</h2><button onclick="heatToggle()" id="heatlabel">All</button></div><div class="card" style="padding:14px"><span class="sub">Darker days have more entries.</span><div class="heat" id="heat"></div></div><div class="head"><h2>Year in review</h2></div><div class="card" id="wrap" style="padding:15px"></div><div class="head"><h2>Settings</h2></div><button class="secondary" onclick="exportData()">Export my data</button><button class="secondary" onclick="if(confirm('Remove all local data?')){localStorage.removeItem(K);location.reload()}">Reset local data</button></section>
-<section id="search" class="search"><button class="close" onclick="searchClose()">×</button><h1>Search</h1><input id="q" oninput="searchRun()" placeholder="Titles, creators, tags, notes"><div id="results"></div></section></main><button class="fab" id="fab" onclick="logAdd()">＋</button><nav class="bottom"><button class="nav on" onclick="go('home',this)"><i>⌂</i>Home</button><button class="nav" onclick="go('books',this)"><i>▣</i>Books</button><button class="nav" onclick="go('screen',this)"><i>◐</i>Screen</button><button class="nav" onclick="go('pods',this)"><i>♬</i>Podcasts</button><button class="nav" onclick="go('me',this)"><i>◯</i>Me</button></nav><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<section id="search" class="search"><button class="close" onclick="searchClose()">×</button><h1>Search</h1><input id="q" oninput="searchRun()" placeholder="Titles, creators, tags, notes"><div id="results"></div></section></main><button class="fab" id="fab" onclick="logAdd()">＋</button><nav class="bottom"><button class="nav on" onclick="go('home',this)"><i>⌂</i>Home</button><button class="nav" onclick="go('books',this)"><i>▣</i>Books</button><button class="nav" onclick="go('movies',this)"><i>◐</i>Movie</button><button class="nav" onclick="go('tvshows',this)"><i>◐</i>TV shows</button><button class="nav" onclick="go('pods',this)"><i>♬</i>Podcasts</button><button class="nav" onclick="go('me',this)"><i>◯</i>Me</button></nav><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <script>
 const K='media-journal-english',I={book:'📚',movie:'🎬',tv:'📺',pod:'🎧'},N={book:'Book',movie:'Movie',tv:'TV show',pod:'Podcast'};let selected='2026-09-10',shown=new Date(2026,8,1),ft='all',st='movie',sf='All',bf='All',pf='All',ht='all';const seed={items:[{id:'b1',type:'book',title:'Harry Potter',creator:'J.K. Rowling',genre:'Fantasy, Young Adult',status:'Reading',rating:4,total:400,current:135,notes:'I love the world building.',favorite:true},{id:'m1',type:'movie',title:'Interstellar',creator:'Christopher Nolan',genre:'Sci-fi, Space',status:'Watched',rating:5,total:169,year:'2014',notes:'The score and ending stay with me.',favorite:true},{id:'t1',type:'tv',title:'Friends',creator:'',genre:'Comedy',status:'Watching',rating:4,total:32,current:18,notes:'Easy and funny at dinner.',favorite:true},{id:'p1',type:'pod',title:'Huberman Lab',creator:'Andrew Huberman',genre:'Health, Science',status:'Listening',rating:4,total:12,current:9,notes:'Practical ideas.',favorite:true}],logs:[{id:'l1',date:'2026-09-10',type:'book',item:'b1',title:'Harry Potter',detail:'p. 102 → p. 135',amount:33},{id:'l2',date:'2026-09-10',type:'tv',item:'t1',title:'Friends',detail:'Season 1 · EP 2, EP 3',eps:2},{id:'l3',date:'2026-09-10',type:'pod',item:'p1',title:'Huberman Lab',detail:'EP102 · Sleep Better'},{id:'l4',date:'2026-09-09',type:'movie',item:'m1',title:'Interstellar',detail:'★★★★★ · First watch'},{id:'l5',date:'2026-09-08',type:'book',item:'b1',title:'Harry Potter',detail:'p. 80 → p. 102',amount:22}],goals:{book:30,movie:50,tv:100,pod:80}};let D=JSON.parse(localStorage.getItem(K)||'null')||seed;let save=()=>localStorage.setItem(K,JSON.stringify(D)),item=id=>D.items.find(x=>x.id===id),date=k=>new Date(k+'T12:00:00'),key=d=>d.toISOString().slice(0,10),status=t=>t==='book'?['All','Want to read','Reading','Read','Paused','Did not finish','Favorites']:t==='movie'?['All','Want to watch','Watched','Favorites']:t==='tv'?['All','Want to watch','Watching','Watched','Paused','Dropped','Favorites']:['All','Want to listen','Listening','Listened','Favorites'];
 function go(id,e){document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('on'));e.classList.add('on');fab.style.display=id==='me'?'none':'block';render()}function move(n){shown.setMonth(shown.getMonth()+n);home()}function modeSet(x,e){document.querySelectorAll('#home .seg button').forEach(b=>b.classList.remove('on'));e.classList.add('on');mon.hidden=x==='week';wek.hidden=x==='month'}function pick(k){selected=k;home()}function logrow(x){return `<div class="log"><div class="icon">${I[x.type]}</div><div class="copy"><b>${x.title}</b><span class="sub">${x.detail}</span></div>${x.item?`<button class="fav" onclick="detail('${x.item}')">›</button>`:''}</div>`}function home(){month.textContent=shown.toLocaleDateString('en-US',{month:'long',year:'numeric'});types.innerHTML=['all','book','movie','tv','pod'].map(t=>`<button class="chip ${ft===t?'on':''}" onclick="ft='${t}';home()">${t==='all'?'All':I[t]+' '+N[t]}</button>`).join('');let y=shown.getFullYear(),m=shown.getMonth(),f=(new Date(y,m,1).getDay()+6)%7,l=new Date(y,m+1,0).getDate(),h='';for(let i=0;i<f;i++)h+='<i></i>';for(let n=1;n<=l;n++){let k=`${y}-${String(m+1).padStart(2,'0')}-${String(n).padStart(2,'0')}`,a=D.logs.filter(x=>x.date===k&&(ft==='all'||x.type===ft));h+=`<button class="day ${a.length?'log':''} ${k===selected?'sel':''} ${k==='2026-09-10'?'today':''}" onclick="pick('${k}')">${n}${a.length?'<span class="dots">'+[...new Set(a.map(x=>x.type))].map(t=>'<i class="'+t+'"></i>').join('')+'</span>':''}</button>`}days.innerHTML=h;let a=D.logs.filter(x=>x.date===selected&&(ft==='all'||x.type===ft));daily.innerHTML=a.length?a.map(logrow).join(''):'<div class="empty">Nothing logged for this day.<br><button class="secondary" onclick="logAdd()">Add a record</button></div>';let g={};D.logs.filter(x=>ft==='all'||x.type===ft).forEach(x=>(g[x.date]??=[]).push(x));timeline.innerHTML=Object.entries(g).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,4).map(([d,a])=>`<div><b class="sub" style="padding-top:9px">${date(d).toLocaleDateString('en-US',{month:'long',day:'numeric'})}</b>${a.map(logrow).join('')}</div>`).join('');let s=date(selected);s.setDate(s.getDate()-((s.getDay()+6)%7));weekgrid.innerHTML=Array.from({length:7},(_,i)=>{let d=new Date(s);d.setDate(s.getDate()+i);let a=D.logs.filter(x=>x.date===key(d)&&(ft==='all'||x.type===ft));return `<div class="wd ${a.length?'active':''}"><b>${'MTWTFSS'[i]} ${d.getDate()}</b><div class="mini">${a.map(x=>I[x.type]).join(' ')}</div></div>`}).join('')}
@@ -506,4 +508,231 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     back.setAttribute('aria-label','Back to details');
     back.innerHTML='<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>';
   };
+</script><style>
+  .activity-window{margin:12px 0 16px;padding:10px 12px;border-radius:12px;background:#f3ede6;color:#60736e;font-size:13px}.activity-window b{color:var(--ink)}.date-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.date-pill{padding:5px 8px;border-radius:99px;background:#f0ebe4;color:#60736e;font-size:12px}
+</style><script>
+  function datesForItem(itemId){const values=[];D.logs.filter(entry=>entry.item===itemId&&!entry.calendarOnly).forEach(entry=>{if(entry.listenDates?.length)values.push(...entry.listenDates);else if(entry.date)values.push(entry.date)});return [...new Set(values)].sort()}
+  function dateLabel(value){return date(value).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+  const detailWithActivityWindow=detail;
+  detail=function(id){detailWithActivityWindow(id);const dates=datesForItem(id);if(!dates.length)return;const first=dateLabel(dates[0]),last=dateLabel(dates[dates.length-1]);const text=dates.length===1?`Recorded on <b>${first}</b>`:`Recorded on <b>${dates.length} days</b> · ${first} – ${last}`;const block=document.createElement('div');block.className='activity-window';block.innerHTML=text;document.querySelector('#sheet h2')?.insertAdjacentElement('afterend',block);const allEntries=D.logs.filter(entry=>entry.item===id);document.querySelectorAll('#sheet .logs .log').forEach((row,index)=>{if(allEntries[index]?.calendarOnly)row.remove()})};
+  const formWithListeningDays=logForm;
+  logForm=function(type){if(type!=='pod')return formWithListeningDays(type);const channels=D.items.filter(record=>record.type==='pod');sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Add podcast episode</h2><label>Podcast channel</label><select class="field" id="podChannel">${channels.map(channel=>`<option value="${channel.id}">${channel.title}</option>`).join('')}</select><label>Episode title *</label><input class="field" id="podTitle" placeholder="Sleep Better"><label>Episode number</label><input class="field" id="podNumber" placeholder="EP102"><label>Duration (minutes)</label><input class="field" id="podDuration" type="number" min="0"><label>Status</label><select class="field" id="podStatus"><option>Want to listen</option><option>Listening</option><option selected>Listened</option></select><label>Listening days</label><div id="listenDays"><input class="field listen-day" type="date" value="${selected}"></div><button class="secondary" type="button" onclick="addListeningDay()">+ Add another day</button><label>Rating</label><select class="field" id="podRating">${[0,1,2,3,4,5].map(value=>`<option value="${value}">${value?'★'.repeat(value):'Not rated'}</option>`).join('')}</select><label>Review</label><textarea class="field" id="podReview" placeholder="Optional notes"></textarea><button class="save" onclick="savePodcastEpisode()">Save episode</button>`;selectContextItem('pod')};
+  function addListeningDay(){const input=document.createElement('input');input.className='field listen-day';input.type='date';input.value=selected;document.getElementById('listenDays').append(input)}
+  savePodcastEpisode=function(){const channelId=podChannel.value,channel=item(channelId);const listenDates=[...new Set([...document.querySelectorAll('.listen-day')].map(input=>input.value).filter(Boolean))].sort();if(!listenDates.length){alert('Choose at least one listening day.');return}const episodeTitle=podTitle.value.trim()||'Untitled episode',episodeNumber=podNumber.value.trim(),duration=podDuration.value.trim(),status=podStatus.value,rating=+podRating.value,review=podReview.value.trim(),episodeId='l'+Date.now();const detail=`${episodeNumber?episodeNumber+' · ':''}${episodeTitle} · ${status}${duration?' · '+duration+' min':''}`;D.logs.unshift({id:episodeId,date:listenDates[0],listenDates,type:'pod',item:channelId,title:channel?.title||'Podcast',detail,episodeTitle,episodeNumber,duration,status,rating,review});listenDates.slice(1).forEach(day=>D.logs.unshift({id:`${episodeId}-${day}`,date:day,type:'pod',item:channelId,title:channel?.title||'Podcast',detail,episodeId,calendarOnly:true}));if(channel&&status==='Listened')channel.current=(channel.current||0)+1;selected=listenDates[listenDates.length-1];save();closeM();render();if(channelId)setTimeout(()=>detail(channelId),0)};
+  const episodePreviewWithDays=entryDetail;
+  entryDetail=function(entryId){episodePreviewWithDays(entryId);const entry=D.logs.find(record=>record.id===entryId);if(!entry||entry.type!=='pod'||!entry.listenDates?.length)return;const review=document.querySelector('#sheet .episode-review');const dates=document.createElement('div');dates.className='episode-review';dates.innerHTML=`<span class="ey">LISTENED ON</span><div class="date-pills">${entry.listenDates.map(day=>`<span class="date-pill">${dateLabel(day)}</span>`).join('')}</div>`;review?.before(dates);document.querySelectorAll('#sheet .episode-meta div').forEach(box=>{if(['STARTED','FINISHED'].includes(box.querySelector('span')?.textContent))box.remove()})};
+</script><style>
+  /* Podcast check-in calendar */
+  .listen-calendar{margin:5px 0 12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+  .listen-cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.listen-cal-head b{font-size:14px}.listen-cal-nav{width:30px;height:30px;border-radius:9px;background:#f0eee8;font-size:19px}.listen-weekdays,.listen-calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}.listen-weekdays{margin-bottom:4px;color:var(--mut);font-size:10px}.listen-cal-day{aspect-ratio:1;border-radius:50%;background:transparent;font-size:12px}.listen-cal-day:hover{background:#f0eee8}.listen-cal-day.is-picked{background:var(--accent);color:#fff;font-weight:700}.listen-cal-day.is-today:not(.is-picked){outline:1px solid var(--accent)}.listen-calendar-note{margin:9px 0 0;color:var(--mut);font-size:12px}.listen-calendar-note b{color:var(--ink)}
+  .movie-watch{margin:14px 0;padding:12px 14px;border-radius:13px;background:#f3ede6;color:#60736e;font-size:13px}.movie-watch b{color:var(--ink)}
+</style><script>
+  /* Podcasts are checked in by tapping calendar dates, not by entering a date list. */
+  let listeningMonth=new Date(2026,8,1), listeningDays=[];
+  function renderListeningCalendar(){
+    const year=listeningMonth.getFullYear(), monthIndex=listeningMonth.getMonth();
+    const start=(new Date(year,monthIndex,1).getDay()+6)%7, count=new Date(year,monthIndex+1,0).getDate();
+    const today=key(new Date()); let cells='';
+    for(let index=0;index<start;index++)cells+='<i></i>';
+    for(let day=1;day<=count;day++){
+      const value=`${year}-${String(monthIndex+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      cells+=`<button type="button" class="listen-cal-day ${listeningDays.includes(value)?'is-picked':''} ${value===today?'is-today':''}" onclick="toggleListeningDay('${value}')">${day}</button>`;
+    }
+    const label=listeningMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    document.getElementById('listenDays').innerHTML=`<div class="listen-calendar"><div class="listen-cal-head"><button class="listen-cal-nav" type="button" onclick="moveListeningMonth(-1)">‹</button><b>${label}</b><button class="listen-cal-nav" type="button" onclick="moveListeningMonth(1)">›</button></div><div class="listen-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="listen-calendar-days">${cells}</div><p class="listen-calendar-note">${listeningDays.length?`<b>${listeningDays.length}</b> day${listeningDays.length===1?'':'s'} selected`:'Tap each day you listened.'}</p></div>`;
+  }
+  function moveListeningMonth(amount){listeningMonth.setMonth(listeningMonth.getMonth()+amount);renderListeningCalendar()}
+  function toggleListeningDay(value){listeningDays=listeningDays.includes(value)?listeningDays.filter(day=>day!==value):[...listeningDays,value].sort();renderListeningCalendar()}
+  const podcastFormWithCalendar=logForm;
+  logForm=function(type){
+    if(type!=='pod')return podcastFormWithCalendar(type);
+    const channels=D.items.filter(record=>record.type==='pod'); listeningDays=[selected]; listeningMonth=date(selected);
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Add podcast episode</h2><label>Podcast channel</label><select class="field" id="podChannel">${channels.map(channel=>`<option value="${channel.id}">${channel.title}</option>`).join('')}</select><label>Episode title *</label><input class="field" id="podTitle" placeholder="Sleep Better"><label>Episode number</label><input class="field" id="podNumber" placeholder="EP102"><label>Duration (minutes)</label><input class="field" id="podDuration" type="number" min="0"><label>Status</label><select class="field" id="podStatus"><option>Want to listen</option><option>Listening</option><option selected>Listened</option></select><label>Listening days</label><div id="listenDays"></div><label>Rating</label><select class="field" id="podRating">${[0,1,2,3,4,5].map(value=>`<option value="${value}">${value?'★'.repeat(value):'Not rated'}</option>`).join('')}</select><label>Review</label><textarea class="field" id="podReview" placeholder="Optional notes"></textarea><button class="save" onclick="savePodcastEpisode()">Save episode</button>`;
+    renderListeningCalendar(); selectContextItem('pod');
+  };
+  savePodcastEpisode=function(){
+    if(!listeningDays.length){alert('Choose at least one listening day.');return}
+    const channelId=podChannel.value,channel=item(channelId),listenDates=[...listeningDays].sort();
+    const episodeTitle=podTitle.value.trim()||'Untitled episode',episodeNumber=podNumber.value.trim(),duration=podDuration.value.trim();
+    const status=podStatus.value,rating=+podRating.value,review=podReview.value.trim(),episodeId='l'+Date.now();
+    const episodeDetail=`${episodeNumber?episodeNumber+' · ':''}${episodeTitle} · ${status}${duration?' · '+duration+' min':''}`;
+    D.logs.unshift({id:episodeId,date:listenDates[0],listenDates,startDate:listenDates[0],endDate:listenDates[listenDates.length-1],type:'pod',item:channelId,title:channel?.title||'Podcast',detail:episodeDetail,episodeTitle,episodeNumber,duration,status,rating,review});
+    listenDates.slice(1).forEach(day=>D.logs.unshift({id:`${episodeId}-${day}`,date:day,type:'pod',item:channelId,title:channel?.title||'Podcast',detail:episodeDetail,episodeId,calendarOnly:true}));
+    if(channel&&status==='Listened')channel.current=(channel.current||0)+1;
+    selected=listenDates[listenDates.length-1];save();closeM();render();if(channelId)setTimeout(()=>detail(channelId),0);
+  };
+
+  /* A movie has one watch date instead of a journal history. */
+  const saveSingleMovieRecord=logSave;
+  logSave=function(type){
+    if(type!=='movie')return saveSingleMovieRecord(type);
+    const id=document.getElementById('li').value, watched=item(id), title=watched?.title||document.getElementById('lt').value||'Untitled';
+    const watchedDate=document.getElementById('ld').value, note=document.getElementById('note').value||'Watched';
+    const existing=D.logs.find(entry=>entry.type==='movie'&&entry.item===id);
+    const record={id:existing?.id||'l'+Date.now(),date:watchedDate,type:'movie',item:id,title,detail:note};
+    if(existing)Object.assign(existing,record);else D.logs.unshift(record);
+    if(watched){watched.status='Watched';watched.current=watched.total||watched.current||0}
+    selected=watchedDate;save();closeM();render();if(id)setTimeout(()=>detail(id),0);
+  };
+  const detailWithoutMovieJournal=detail;
+  detail=function(id){
+    detailWithoutMovieJournal(id);
+    const media=item(id);if(media?.type!=='movie')return;
+    const entries=D.logs.filter(entry=>entry.type==='movie'&&entry.item===id).sort((a,b)=>a.date.localeCompare(b.date));
+    [...document.querySelectorAll('#sheet h3')].filter(heading=>heading.textContent==='Journal entries').forEach(heading=>{heading.nextElementSibling?.remove();heading.remove()});
+    [...document.querySelectorAll('#sheet .secondary')].filter(button=>button.textContent.includes('Add a record')).forEach(button=>button.remove());
+    const activity=document.querySelector('#sheet .activity-window');
+    if(activity)activity.remove();
+    const watch=document.createElement('div');watch.className='movie-watch';watch.innerHTML=entries.length?`<b>Watched on</b> ${dateLabel(entries[0].date)}`:'Not marked as watched yet.';
+    document.querySelector('#sheet h2')?.insertAdjacentElement('afterend',watch);
+    if(!entries.length){const mark=document.createElement('button');mark.className='secondary';mark.textContent='Mark as watched';mark.onclick=()=>logAdd('movie');document.querySelector('#sheet .save')?.before(mark)}
+  };
+
+  /* Dedicated movie form: one action, one date, one reliable save route. */
+  const formWithMovieWatch=logForm;
+  logForm=function(type){
+    if(type!=='movie')return formWithMovieWatch(type);
+    const movies=D.items.filter(record=>record.type==='movie');
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Mark movie as watched</h2><label>Movie</label><select class="field" id="movieItem">${movies.map(movie=>`<option value="${movie.id}">${movie.title}</option>`).join('')}</select><label>Watched on</label><input class="field" id="movieDate" type="date" value="${selected}"><label>Note</label><textarea class="field" id="movieNote" placeholder="Optional viewing note"></textarea><button class="save" type="button" onclick="saveMovieWatch()">Save movie</button>`;
+    if(activeRecordItem&&movies.some(movie=>movie.id===activeRecordItem))document.getElementById('movieItem').value=activeRecordItem;
+  };
+  function saveMovieWatch(){
+    const id=document.getElementById('movieItem').value, watched=item(id), watchedDate=document.getElementById('movieDate').value;
+    if(!id||!watchedDate){alert('Choose a movie and date.');return}
+    const existing=D.logs.find(entry=>entry.type==='movie'&&entry.item===id);
+    const record={id:existing?.id||'l'+Date.now(),date:watchedDate,type:'movie',item:id,title:watched.title,detail:document.getElementById('movieNote').value.trim()||'Watched'};
+    if(existing)Object.assign(existing,record);else D.logs.unshift(record);
+    watched.status='Watched';watched.current=watched.total||watched.current||0;selected=watchedDate;
+    save();closeM();render();setTimeout(()=>detail(id),0);
+  }
+
+  /* Podcast previews keep the familiar started/finished layout. */
+  const previewWithListeningRange=entryDetail;
+  entryDetail=function(entryId){
+    previewWithListeningRange(entryId);
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry||entry.type!=='pod'||!entry.listenDates?.length)return;
+    const dates=[...entry.listenDates].sort(), meta=document.querySelector('#sheet .episode-meta');
+    document.querySelectorAll('#sheet .episode-review').forEach(block=>{if(block.querySelector('.ey')?.textContent==='LISTENED ON')block.remove()});
+    if(meta){
+      meta.querySelectorAll('[data-listen-range]').forEach(block=>block.remove());
+      meta.insertAdjacentHTML('beforeend',`<div data-listen-range><span>STARTED</span><b>${date(dates[0]).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b></div><div data-listen-range><span>FINISHED</span><b>${date(dates[dates.length-1]).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</b></div>`);
+    }
+  };
+
+  /* Editing an episode uses the same day-by-day calendar as adding one. */
+  let editingListeningDays=[], editingListeningMonth=new Date(2026,8,1);
+  function renderEpisodeListeningCalendar(){
+    const year=editingListeningMonth.getFullYear(), monthIndex=editingListeningMonth.getMonth();
+    const lead=(new Date(year,monthIndex,1).getDay()+6)%7, daysInMonth=new Date(year,monthIndex+1,0).getDate(); let cells='';
+    for(let index=0;index<lead;index++)cells+='<i></i>';
+    for(let day=1;day<=daysInMonth;day++){
+      const value=`${year}-${String(monthIndex+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      cells+=`<button type="button" class="listen-cal-day ${editingListeningDays.includes(value)?'is-picked':''}" onclick="toggleEpisodeListeningDay('${value}')">${day}</button>`;
+    }
+    document.getElementById('editListenDays').innerHTML=`<div class="listen-calendar"><div class="listen-cal-head"><button class="listen-cal-nav" type="button" onclick="moveEpisodeListeningMonth(-1)">‹</button><b>${editingListeningMonth.toLocaleDateString('en-US',{month:'long',year:'numeric'})}</b><button class="listen-cal-nav" type="button" onclick="moveEpisodeListeningMonth(1)">›</button></div><div class="listen-weekdays"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="listen-calendar-days">${cells}</div><p class="listen-calendar-note">${editingListeningDays.length?`<b>${editingListeningDays.length}</b> day${editingListeningDays.length===1?'':'s'} selected`:'Tap each day you listened.'}</p></div>`;
+  }
+  function moveEpisodeListeningMonth(amount){editingListeningMonth.setMonth(editingListeningMonth.getMonth()+amount);renderEpisodeListeningCalendar()}
+  function toggleEpisodeListeningDay(value){editingListeningDays=editingListeningDays.includes(value)?editingListeningDays.filter(day=>day!==value):[...editingListeningDays,value].sort();renderEpisodeListeningCalendar()}
+  const editWithListeningCalendar=entryEdit;
+  entryEdit=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId); if(!entry||entry.type!=='pod')return editWithListeningCalendar(entryId);
+    editingListeningDays=[...(entry.listenDates?.length?entry.listenDates:[entry.startDate||entry.date,entry.endDate||entry.date])].filter(Boolean);editingListeningDays=[...new Set(editingListeningDays)].sort();editingListeningMonth=date(editingListeningDays[0]||selected);
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit podcast episode</h2><label>Episode title</label><input class="field" id="editEpisodeTitle" value="${entry.episodeTitle||''}"><label>Episode number</label><input class="field" id="editEpisodeNumber" value="${entry.episodeNumber||''}"><label>Duration (minutes)</label><input class="field" id="editEpisodeDuration" type="number" min="0" value="${entry.duration||''}"><label>Status</label><select class="field" id="editEpisodeStatus"><option ${entry.status==='Want to listen'?'selected':''}>Want to listen</option><option ${entry.status==='Listening'?'selected':''}>Listening</option><option ${entry.status==='Listened'?'selected':''}>Listened</option></select><label>Listening days</label><div id="editListenDays"></div><label>Rating</label><select class="field" id="editEpisodeRating">${[0,1,2,3,4,5].map(value=>`<option value="${value}" ${+entry.rating===value?'selected':''}>${value?'★'.repeat(value):'Not rated'}</option>`).join('')}</select><label>Review</label><textarea class="field" id="editEpisodeReview">${entry.review||''}</textarea><button class="save" onclick="saveEpisodeWithDays('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+    renderEpisodeListeningCalendar();
+  };
+  function saveEpisodeWithDays(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry||!editingListeningDays.length){alert('Choose at least one listening day.');return}
+    const days=[...editingListeningDays].sort();entry.episodeTitle=document.getElementById('editEpisodeTitle').value.trim()||'Untitled episode';entry.episodeNumber=document.getElementById('editEpisodeNumber').value.trim();entry.duration=document.getElementById('editEpisodeDuration').value.trim();entry.status=document.getElementById('editEpisodeStatus').value;entry.rating=+document.getElementById('editEpisodeRating').value;entry.review=document.getElementById('editEpisodeReview').value.trim();entry.listenDates=days;entry.date=days[0];entry.startDate=days[0];entry.endDate=days[days.length-1];entry.detail=`${entry.episodeNumber?entry.episodeNumber+' · ':''}${entry.episodeTitle} · ${entry.status}${entry.duration?' · '+entry.duration+' min':''}`;
+    D.logs=D.logs.filter(record=>record.episodeId!==entryId);const channel=item(entry.item);days.slice(1).forEach(day=>D.logs.unshift({id:`${entryId}-${day}`,date:day,type:'pod',item:entry.item,title:channel?.title||entry.title,detail:entry.detail,episodeId:entryId,calendarOnly:true}));
+    selected=days[days.length-1];save();closeM();render();setTimeout(()=>entryDetail(entryId),0);
+  }
+
+  /* Saved record edits return to their parent media detail. */
+  const saveReadingAndReturn=saveBookEntry;
+  saveBookEntry=function(entryId){const parent=D.logs.find(record=>record.id===entryId)?.item;saveReadingAndReturn(entryId);if(parent)setTimeout(()=>detail(parent),0)};
+  const saveRecordAndReturn=entrySave;
+  entrySave=function(entryId){const parent=D.logs.find(record=>record.id===entryId)?.item;saveRecordAndReturn(entryId);if(parent)setTimeout(()=>detail(parent),0)};
+
+  /* Movies are a one-time watch, so they never show a progress indicator. */
+  const cardsWithoutMovieProgress=cards;
+  cards=function(type,activeFilter,targetId){
+    cardsWithoutMovieProgress(type,activeFilter,targetId);
+    if(type!=='movie')return;
+    document.querySelectorAll(`#${targetId} .media .bar`).forEach(bar=>bar.remove());
+    document.querySelectorAll(`#${targetId} .media .info p`).forEach(line=>{if(/\d+\s*\/\s*\d+\s*min/.test(line.textContent))line.remove()});
+  };
+  const detailWithoutMovieProgress=detail;
+  detail=function(id){
+    detailWithoutMovieProgress(id);
+    if(item(id)?.type!=='movie')return;
+    document.querySelectorAll('#sheet .bar').forEach(bar=>bar.remove());
+    document.querySelectorAll('#sheet .row .sub').forEach(line=>{if(line.textContent.includes('progress'))line.closest('.row')?.remove()});
+  };
+
+  /* Expose a direct click handler for the movie form. */
+  window.saveMovieWatch=function(){
+    const movieSelect=document.getElementById('movieItem');
+    const dateInput=document.getElementById('movieDate');
+    const noteInput=document.getElementById('movieNote');
+    const movieId=movieSelect?.value, watched=item(movieId), watchedDate=dateInput?.value;
+    if(!watched||!watchedDate){alert('Choose a movie and date.');return}
+    const existing=D.logs.find(entry=>entry.type==='movie'&&entry.item===movieId);
+    const record={id:existing?.id||'l'+Date.now(),date:watchedDate,type:'movie',item:movieId,title:watched.title,detail:noteInput?.value.trim()||'Watched'};
+    if(existing)Object.assign(existing,record);else D.logs.unshift(record);
+    watched.status='Watched';watched.current=watched.total||0;selected=watchedDate;
+    save();closeM();render();setTimeout(()=>detail(movieId),0);
+  };
+
+  /* Item editor saves through explicit form fields, including a new movie. */
+  window.itemSave=function(type,id){
+    const titleField=document.getElementById('title');
+    const creatorField=document.getElementById('creator');
+    const genreField=document.getElementById('genre');
+    const stateField=document.getElementById('state');
+    const ratingField=document.getElementById('rating');
+    const totalField=document.getElementById('total');
+    const currentField=document.getElementById('current');
+    const notesField=document.getElementById('notes');
+    if(!titleField?.value.trim()){alert('Add a title before saving.');titleField?.focus();return}
+    const record=id?item(id):{id:type[0]+Date.now(),type,favorite:false};
+    Object.assign(record,{title:titleField.value.trim(),creator:creatorField?.value.trim()||'',genre:genreField?.value.trim()||'',status:stateField?.value||status(type)[1],rating:+ratingField?.value||0,total:+totalField?.value||0,current:+currentField?.value||0,notes:notesField?.value.trim()||''});
+    if(!id)D.items.unshift(record);
+    save();closeM();render();
+  };
+  itemSave=window.itemSave;
+
+  /* Screen sections use an explicit label for the complete collection. */
+  const screenFiltersWithShowAll=filters;
+  filters=function(type,value,targetId){
+    screenFiltersWithShowAll(type,value,targetId);
+    if(type==='movie'||type==='tv'){
+      const first=document.querySelector(`#${targetId} .chip`);
+      if(first)first.textContent='Show all';
+    }
+  };
+
+  /* Separate screen pages, with one compact Watchlist entry point. */
+  function openWatchView(viewId){go(viewId,document.querySelector('.bottom .nav:nth-of-type(3)'))}
+  const listsForSeparateScreenPages=lists;
+  lists=function(){
+    filters('book',bf,'bookchips');cards('book',bf,'booklist');
+    filters('movie',sf,'moviechips');cards('movie',sf,'movielist');
+    filters('tv',sf,'tvchips');cards('tv',sf,'tvlist');
+    filters('pod',pf,'podchips');cards('pod',pf,'podlist');
+  };
+  render();
+</script><style>
+  .watch-choices{display:grid;gap:12px;margin-top:18px}.watch-choice{width:100%;padding:17px;display:flex;align-items:center;gap:14px;text-align:left}.watch-choice span:nth-child(2){flex:1}.watch-choice b{display:block;font-size:17px}.watch-choice small{display:block;margin-top:4px;color:var(--mut);line-height:1.35}.watch-choice>i{font-size:25px;color:#bcae9e;font-style:normal}.watch-choice-icon{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;color:#fff;font-size:16px}.movie-mark{background:#c98f7e}.tv-mark{background:#8aa6b9}
+</style><script>
+  /* Six direct destinations in the bottom navigation. */
+  const bottomIcons=[
+    '<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10H3z"/><path d="M9 20v-6h6v6"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M3.5 5.5c2.6-1.4 5.4-1.2 8.5.7v14c-3.1-1.9-5.9-2.1-8.5-.7z"/><path d="M20.5 5.5c-2.6-1.4-5.4-1.2-8.5.7v14c3.1-1.9 5.9-2.1 8.5-.7z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4.5 11h15v9h-15z"/><path d="M4.5 11h15"/><path d="m3.5 6.7 15.6-4.2 1 3.8-15.6 4.2z"/><path d="m6.4 5.9 2.2 3.2M12 4.4l2.2 3.2M17.5 2.9l2.1 3.1"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="m8 3 4 4 4-4"/><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 22h6"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M4 12v4a2 2 0 0 0 2 2h1v-7H6a2 2 0 0 0-2 1zM20 12v4a2 2 0 0 1-2 2h-1v-7h1a2 2 0 0 1 2 1z"/></svg>',
+    '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c1-5 4-7 8-7s7 2 8 7"/></svg>'
+  ];
+  const bottomLabels=['Home','Books','Movie','TV shows','Podcasts','Me'];
+  document.querySelectorAll('.bottom .nav').forEach((button,index)=>button.innerHTML=`<i>${bottomIcons[index]}</i>${bottomLabels[index]}`);
 </script></body></html>
