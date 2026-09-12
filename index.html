@@ -339,7 +339,7 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     const watched=Number(show?.current)||0;
     document.getElementById('eps').innerHTML=Array.from({length:total},(_,index)=>{
       const episode=index+1;
-      return `<button type="button" class="${episode===watched+1?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
+      return `<button type="button" class="${episode===watched?'last':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
     }).join('');
   }
 </script><script>
@@ -749,4 +749,39 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     document.querySelectorAll('.day').forEach(day=>{if(day.getAttribute('onclick')?.includes(today))day.classList.add('today')});
   };
   render();
+</script><style>
+  .day.today{outline:1.5px solid var(--accent);outline-offset:1px}.day.today.sel{outline:2px solid #52736e}
+  .check button.last{background:#dfe9e4;color:#466760;font-weight:700}
+</style><script>
+  /* Calendar arrows move by week when the Week tab is active. */
+  let journalCalendarMode='month';
+  const chooseJournalCalendarMode=modeSet;
+  modeSet=function(mode,button){journalCalendarMode=mode;chooseJournalCalendarMode(mode,button)};
+  const moveJournalCalendar=move;
+  move=function(amount){
+    if(journalCalendarMode!=='week')return moveJournalCalendar(amount);
+    const next=date(selected);next.setDate(next.getDate()+amount*7);
+    selected=key(next);shown=new Date(next.getFullYear(),next.getMonth(),1);home();
+  };
+
+  /* The previous finishing episode is a reference, not an auto-selected new record. */
+  const renderEpisodesWithReference=renderTvEpisodes;
+  renderTvEpisodes=function(){renderEpisodesWithReference()};
+</script><style>
+  .wd b{display:block;white-space:nowrap;font-size:11px;letter-spacing:-.035em}
+</style><script>
+  /* Week view identifies the actual seven-day span rather than the containing month. */
+  const homeWithWeekRange=home;
+  home=function(){
+    homeWithWeekRange();
+    if(journalCalendarMode!=='week')return;
+    const start=date(selected);start.setDate(start.getDate()-((start.getDay()+6)%7));
+    const end=new Date(start);end.setDate(start.getDate()+6);
+    const startLabel=start.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const endLabel=end.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    month.textContent=`${startLabel} – ${endLabel}`;
+  };
+  const setCalendarModeWithRange=modeSet;
+  modeSet=function(mode,button){setCalendarModeWithRange(mode,button);home()};
+  home();
 </script></body></html>
