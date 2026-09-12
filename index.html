@@ -784,4 +784,39 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   const setCalendarModeWithRange=modeSet;
   modeSet=function(mode,button){setCalendarModeWithRange(mode,button);home()};
   home();
+</script><style>
+  .pod-in-progress{margin:2px 0 12px;padding:11px 12px;border-radius:13px;background:#edf2ed;border:1px solid #d9e4da}.pod-in-progress b{display:block;font-size:13px}.pod-in-progress span{display:block;margin-top:3px;color:var(--mut);font-size:12px}.pod-in-progress-actions{display:flex;gap:7px;margin-top:10px}.pod-in-progress-actions button{flex:1;padding:8px 6px;border-radius:9px;background:#fff;color:#50736c;font-size:12px}.pod-in-progress-actions button:last-child{background:var(--accent);color:#fff}
+</style><script>
+  /* A channel with an episode in progress offers a check-in before creating another episode. */
+  function podcastEpisodeChoice(){
+    const channelId=document.getElementById('podChannel')?.value;
+    const existing=document.getElementById('podEpisodeChoice');existing?.remove();
+    const ongoing=D.logs.filter(entry=>entry.type==='pod'&&entry.item===channelId&&!entry.calendarOnly&&entry.status==='Listening').sort((a,b)=>(b.endDate||b.date).localeCompare(a.endDate||a.date))[0];
+    if(!ongoing)return;
+    const box=document.createElement('div');box.id='podEpisodeChoice';box.className='pod-in-progress';
+    box.innerHTML=`<b>Episode in progress</b><span>${ongoing.episodeNumber?ongoing.episodeNumber+' · ':''}${ongoing.episodeTitle||ongoing.detail}</span><div class="pod-in-progress-actions"><button type="button" onclick="continueNewPodcastEpisode()">Add new episode</button><button type="button" onclick="checkInPodcastEpisode('${ongoing.id}')">Check in this episode</button></div>`;
+    document.getElementById('podChannel').insertAdjacentElement('afterend',box);
+  }
+  function continueNewPodcastEpisode(){document.getElementById('podEpisodeChoice')?.remove();document.getElementById('podTitle')?.focus()}
+  function checkInPodcastEpisode(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry)return;
+    editingListeningDays=[...(entry.listenDates?.length?entry.listenDates:[entry.startDate||entry.date,entry.endDate||entry.date])].filter(Boolean);editingListeningDays=[...new Set(editingListeningDays)].sort();
+    editingListeningMonth=date(localToday());
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><span class="ey">PODCAST CHECK-IN</span><h2>${entry.episodeTitle||'Untitled episode'}</h2><p class="sub">${entry.episodeNumber||entry.title}</p><label>Listening days</label><div id="editListenDays"></div><button class="save" onclick="savePodcastCheckIn('${entry.id}')">Save check-in</button>`;
+    renderEpisodeListeningCalendar();
+  }
+  function savePodcastCheckIn(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry||!editingListeningDays.length){alert('Choose at least one listening day.');return}
+    const days=[...editingListeningDays].sort();entry.listenDates=days;entry.date=days[0];entry.startDate=days[0];entry.endDate=days[days.length-1];
+    D.logs=D.logs.filter(record=>record.episodeId!==entryId);const channel=item(entry.item);
+    days.slice(1).forEach(day=>D.logs.unshift({id:`${entryId}-${day}`,date:day,type:'pod',item:entry.item,title:channel?.title||entry.title,detail:entry.detail,episodeId:entryId,calendarOnly:true}));
+    selected=days[days.length-1];save();closeM();render();setTimeout(()=>detail(entry.item),0);
+  }
+  const podcastFormWithEpisodeChoice=logForm;
+  logForm=function(type){
+    podcastFormWithEpisodeChoice(type);
+    if(type!=='pod')return;
+    const channel=document.getElementById('podChannel');
+    if(channel){channel.onchange=podcastEpisodeChoice;setTimeout(podcastEpisodeChoice,0)}
+  };
 </script></body></html>
