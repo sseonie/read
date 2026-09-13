@@ -819,4 +819,23 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     const channel=document.getElementById('podChannel');
     if(channel){channel.onchange=podcastEpisodeChoice;setTimeout(podcastEpisodeChoice,0)}
   };
+</script><script>
+  /* TV history records stay episode-based when edited. */
+  function tvEpisodesFromRecord(entry){return [...String(entry.detail||'').matchAll(/EP\s*(\d+)/gi)].map(match=>Number(match[1]))}
+  const editTvRecordWithEpisodePicker=entryEdit;
+  entryEdit=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);
+    if(!entry||entry.type!=='tv')return editTvRecordWithEpisodePicker(entryId);
+    const show=item(entry.item), total=Math.max(1,Math.min(200,Number(show?.total)||12));
+    const checked=new Set(tvEpisodesFromRecord(entry));
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit TV record</h2><label>Date</label><input class="field" id="editTvDate" type="date" value="${entry.date}"><label>Episodes watched</label><div class="check" id="editTvEpisodes">${Array.from({length:total},(_,index)=>{const episode=index+1;return `<button type="button" class="${checked.has(episode)?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`}).join('')}</div><button class="save" onclick="saveTvEpisodeRecord('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+  };
+  function saveTvEpisodeRecord(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry)return;
+    const episodes=[...document.querySelectorAll('#editTvEpisodes .on')].map(button=>Number(button.textContent.replace(/\D/g,''))).sort((a,b)=>a-b);
+    if(!episodes.length){alert('Choose at least one episode.');return}
+    entry.date=document.getElementById('editTvDate').value;entry.eps=episodes.length;entry.detail=`Season 1 · ${episodes.map(episode=>'EP '+episode).join(', ')}`;
+    const show=item(entry.item);if(show)show.current=D.logs.filter(record=>record.type==='tv'&&record.item===entry.item&&!record.calendarOnly).reduce((count,record)=>count+(record.eps||0),0);
+    save();closeM();render();setTimeout(()=>detail(entry.item),0);
+  }
 </script></body></html>
