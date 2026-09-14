@@ -837,4 +837,98 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     const show=item(entry.item);if(show)show.current=D.logs.filter(record=>record.type==='tv'&&record.item===entry.item&&!record.calendarOnly).reduce((count,record)=>count+(record.eps||0),0);
     save();closeM();render();setTimeout(()=>detail(entry.item),0);
   }
+</script><script>
+  /* TV records only show a season when the user supplies one. */
+  const tvFormWithOptionalSeason=logForm;
+  logForm=function(type){
+    tvFormWithOptionalSeason(type);
+    if(type!=='tv')return;
+    const episodes=document.getElementById('eps');
+    episodes?.insertAdjacentHTML('beforebegin','<label>Season <span class="sub">(optional)</span></label><input class="field" id="tvSeason" type="number" min="1" placeholder="e.g. 2">');
+    const saveButton=document.querySelector('#sheet .save');
+    if(saveButton)saveButton.onclick=saveNewTvEpisodeRecord;
+  };
+  function tvDetail(season,episodes){return `${season?`Season ${season} · `:''}${episodes.map(episode=>'EP '+episode).join(', ')}`}
+  function saveNewTvEpisodeRecord(){
+    const id=document.getElementById('li')?.value,show=item(id),dateValue=document.getElementById('ld')?.value;
+    const episodes=[...document.querySelectorAll('#eps .on')].map(button=>Number(button.textContent.replace(/\D/g,''))).sort((a,b)=>a-b);
+    if(!episodes.length){alert('Choose at least one episode.');return}
+    const season=document.getElementById('tvSeason')?.value.trim(),title=show?.title||document.getElementById('lt')?.value.trim()||'Untitled';
+    D.logs.unshift({id:'l'+Date.now(),date:dateValue,type:'tv',item:id,title,detail:tvDetail(season,episodes),eps:episodes.length,season:season||''});
+    if(show)show.current=(show.current||0)+episodes.length;
+    selected=dateValue;save();closeM();render();if(id)setTimeout(()=>detail(id),0);
+  }
+  const editTvWithOptionalSeason=entryEdit;
+  entryEdit=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry||entry.type!=='tv')return editTvWithOptionalSeason(entryId);
+    const show=item(entry.item),total=Math.max(1,Math.min(200,Number(show?.total)||12));
+    const checked=new Set(tvEpisodesFromRecord(entry)),savedSeason=entry.season||String(entry.detail||'').match(/Season\s*(\d+)/i)?.[1]||'';
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit TV record</h2><label>Date</label><input class="field" id="editTvDate" type="date" value="${entry.date}"><label>Season <span class="sub">(optional)</span></label><input class="field" id="editTvSeason" type="number" min="1" value="${savedSeason}" placeholder="e.g. 2"><label>Episodes watched</label><div class="check" id="editTvEpisodes">${Array.from({length:total},(_,index)=>{const episode=index+1;return `<button type="button" class="${checked.has(episode)?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`}).join('')}</div><button class="save" onclick="saveTvEpisodeRecord('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+  };
+  saveTvEpisodeRecord=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry)return;
+    const episodes=[...document.querySelectorAll('#editTvEpisodes .on')].map(button=>Number(button.textContent.replace(/\D/g,''))).sort((a,b)=>a-b);
+    if(!episodes.length){alert('Choose at least one episode.');return}
+    const season=document.getElementById('editTvSeason').value.trim();entry.date=document.getElementById('editTvDate').value;entry.eps=episodes.length;entry.season=season||'';entry.detail=tvDetail(season,episodes);
+    const show=item(entry.item);if(show)show.current=D.logs.filter(record=>record.type==='tv'&&record.item===entry.item&&!record.calendarOnly).reduce((count,record)=>count+(record.eps||0),0);
+    save();closeM();render();setTimeout(()=>detail(entry.item),0);
+  };
+
+  /* Podcast channel totals reflect episodes whose status is Listened. */
+  function refreshPodcastCount(channelId){
+    const channel=item(channelId);if(!channel)return;
+    channel.current=D.logs.filter(entry=>entry.type==='pod'&&entry.item===channelId&&!entry.calendarOnly&&entry.status==='Listened').length;
+  }
+  const saveNewPodcastAndRefresh=savePodcastEpisode;
+  savePodcastEpisode=function(){const channelId=document.getElementById('podChannel')?.value;saveNewPodcastAndRefresh();if(channelId){refreshPodcastCount(channelId);save();render()}};
+  const savePodcastEditAndRefresh=saveEpisodeWithDays;
+  saveEpisodeWithDays=function(entryId){const channelId=D.logs.find(entry=>entry.id===entryId)?.item;savePodcastEditAndRefresh(entryId);if(channelId){refreshPodcastCount(channelId);save();render()}};
+  const saveCheckInAndRefresh=savePodcastCheckIn;
+  savePodcastCheckIn=function(entryId){const channelId=D.logs.find(entry=>entry.id===entryId)?.item;saveCheckInAndRefresh(entryId);if(channelId){refreshPodcastCount(channelId);save();render()}};
+  const cardsWithPodcastTotals=cards;
+  cards=function(type,activeFilter,targetId){
+    if(type==='pod')D.items.filter(record=>record.type==='pod').forEach(record=>refreshPodcastCount(record.id));
+    cardsWithPodcastTotals(type,activeFilter,targetId);
+    if(type!=='pod')return;
+    document.querySelectorAll(`#${targetId} .media`).forEach((card,index)=>{
+      card.querySelector('.bar')?.remove();
+      const record=D.items.filter(item=>item.type==='pod'&&(activeFilter==='all'||activeFilter==='All'||(activeFilter==='Favorites'?item.favorite:item.status===activeFilter)))[index];
+      card.querySelectorAll('.info p').forEach(line=>{if(/episodes/.test(line.textContent))line.textContent=`Listened: ${record?.current||0} episodes`});
+    });
+  };
+</script><script>
+  /* TV records no longer use seasons. */
+  D.logs.filter(entry=>entry.type==='tv').forEach(entry=>{entry.season='';entry.detail=String(entry.detail||'').replace(/^Season\s*\d+\s*·\s*/i,'')});
+  save();
+  function tvEpisodesOnly(episodes){return episodes.map(episode=>'EP '+episode).join(', ')}
+  const tvFormWithoutSeason=logForm;
+  logForm=function(type){
+    tvFormWithoutSeason(type);
+    if(type!=='tv')return;
+    document.getElementById('tvSeason')?.previousElementSibling?.remove();document.getElementById('tvSeason')?.remove();
+    const saveButton=document.querySelector('#sheet .save');if(saveButton)saveButton.onclick=saveNewTvRecordWithoutSeason;
+  };
+  function saveNewTvRecordWithoutSeason(){
+    const id=document.getElementById('li')?.value,show=item(id),dateValue=document.getElementById('ld')?.value;
+    const episodes=[...document.querySelectorAll('#eps .on')].map(button=>Number(button.textContent.replace(/\D/g,''))).sort((a,b)=>a-b);
+    if(!episodes.length){alert('Choose at least one episode.');return}
+    const title=show?.title||document.getElementById('lt')?.value.trim()||'Untitled';
+    D.logs.unshift({id:'l'+Date.now(),date:dateValue,type:'tv',item:id,title,detail:tvEpisodesOnly(episodes),eps:episodes.length});
+    if(show)show.current=(show.current||0)+episodes.length;
+    selected=dateValue;save();closeM();render();if(id)setTimeout(()=>detail(id),0);
+  }
+  const editTvWithoutSeason=entryEdit;
+  entryEdit=function(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry||entry.type!=='tv')return editTvWithoutSeason(entryId);
+    const show=item(entry.item),total=Math.max(1,Math.min(200,Number(show?.total)||12)),checked=new Set(tvEpisodesFromRecord(entry));
+    sheet.innerHTML=`<button class="close" onclick="closeM()">×</button><h2>Edit TV record</h2><label>Date</label><input class="field" id="editTvDate" type="date" value="${entry.date}"><label>Episodes watched</label><div class="check" id="editTvEpisodes">${Array.from({length:total},(_,index)=>{const episode=index+1;return `<button type="button" class="${checked.has(episode)?'on':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`}).join('')}</div><button class="save" onclick="saveTvRecordWithoutSeason('${entry.id}')">Save changes</button><button class="secondary" onclick="entryDelete('${entry.id}')">Delete record</button>`;
+  };
+  function saveTvRecordWithoutSeason(entryId){
+    const entry=D.logs.find(record=>record.id===entryId);if(!entry)return;
+    const episodes=[...document.querySelectorAll('#editTvEpisodes .on')].map(button=>Number(button.textContent.replace(/\D/g,''))).sort((a,b)=>a-b);
+    if(!episodes.length){alert('Choose at least one episode.');return}
+    entry.date=document.getElementById('editTvDate').value;entry.eps=episodes.length;entry.season='';entry.detail=tvEpisodesOnly(episodes);
+    const show=item(entry.item);if(show)show.current=D.logs.filter(record=>record.type==='tv'&&record.item===entry.item&&!record.calendarOnly).reduce((count,record)=>count+(record.eps||0),0);
+    save();closeM();render();setTimeout(()=>detail(entry.item),0);
+  }
 </script></body></html>
