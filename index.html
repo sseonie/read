@@ -339,7 +339,7 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     const watched=Number(show?.current)||0;
     document.getElementById('eps').innerHTML=Array.from({length:total},(_,index)=>{
       const episode=index+1;
-      return `<button type="button" class="${episode===watched?'last':''}" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
+      return `<button type="button" onclick="this.classList.toggle('on')">EP ${episode}</button>`;
     }).join('');
   }
 </script><script>
@@ -751,7 +751,6 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   render();
 </script><style>
   .day.today{outline:1.5px solid var(--accent);outline-offset:1px}.day.today.sel{outline:2px solid #52736e}
-  .check button.last{background:#dfe9e4;color:#466760;font-weight:700}
 </style><script>
   /* Calendar arrows move by week when the Week tab is active. */
   let journalCalendarMode='month';
