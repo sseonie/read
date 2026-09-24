@@ -7,7 +7,7 @@
 <section id="movies" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>Movies</h1></div><button class="round" onclick="itemEdit('movie')">＋</button></header><div class="chips" id="moviechips"></div><div id="movielist"></div></section>
 <section id="tvshows" class="view"><header class="top"><div><span class="ey">WATCHLIST</span><h1>TV shows</h1></div><button class="round" onclick="itemEdit('tv')">＋</button></header><div class="chips" id="tvchips"></div><div id="tvlist"></div></section>
 <section id="pods" class="view"><header class="top"><div><span class="ey">LISTENING LOG</span><h1>Podcasts</h1></div><button class="round" onclick="itemEdit('pod')">＋</button></header><div class="chips" id="podchips"></div><div id="podlist"></div></section>
-<section id="me" class="view"><span class="ey">YOUR YEAR</span><h1>My space</h1><div class="head"><h2>This month</h2></div><div class="card" style="padding:15px"><div class="statgrid" id="stats"></div></div><div class="head"><h2>Goals</h2><button onclick="goalEdit()">Edit</button></div><div class="card" id="goals" style="padding:14px"></div><div class="head"><h2>2026 activity</h2><button onclick="heatToggle()" id="heatlabel">All</button></div><div class="card" style="padding:14px"><span class="sub">Darker days have more entries.</span><div class="heat" id="heat"></div></div><div class="head"><h2>Year in review</h2></div><div class="card" id="wrap" style="padding:15px"></div><div class="head"><h2>Settings</h2></div><button class="secondary" onclick="exportData()">Export my data</button><button class="secondary" onclick="if(confirm('Remove all local data?')){localStorage.removeItem(K);location.reload()}">Reset local data</button></section>
+<section id="me" class="view"><span class="ey">YOUR YEAR</span><h1>My space</h1><div class="head"><h2>This month</h2></div><div class="card" style="padding:15px"><div class="statgrid" id="stats"></div></div><div class="head"><h2>Goals</h2><button onclick="goalEdit()">Edit</button></div><div class="card" id="goals" style="padding:14px"></div><div class="head"><h2>2026 activity</h2><button onclick="heatToggle()" id="heatlabel">All</button></div><div class="card" style="padding:14px"><span class="sub">Darker days have more entries.</span><div class="heat" id="heat"></div></div><div class="head"><h2>Year in review</h2></div><div class="card" id="wrap" style="padding:15px"></div><div class="head"><h2>Settings</h2></div><button class="secondary" onclick="exportData()">Download backup</button><button class="secondary" onclick="document.getElementById('importFile').click()">Restore from backup</button><input id="importFile" type="file" accept="application/json,.json" hidden onchange="importData(this.files[0]);this.value=''"><button class="secondary" onclick="if(confirm('Remove all local data?')){localStorage.removeItem(K);location.reload()}">Reset local data</button></section>
 <section id="search" class="search"><button class="close" onclick="searchClose()">×</button><h1>Search</h1><input id="q" oninput="searchRun()" placeholder="Titles, creators, tags, notes"><div id="results"></div></section></main><button class="fab" id="fab" onclick="logAdd()">＋</button><nav class="bottom"><button class="nav on" onclick="go('home',this)"><i>⌂</i>Home</button><button class="nav" onclick="go('books',this)"><i>▣</i>Books</button><button class="nav" onclick="go('movies',this)"><i>◐</i>Movie</button><button class="nav" onclick="go('tvshows',this)"><i>◐</i>TV shows</button><button class="nav" onclick="go('pods',this)"><i>♬</i>Podcasts</button><button class="nav" onclick="go('me',this)"><i>◯</i>Me</button></nav><div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 <script>
 const K='media-journal-english',I={book:'📚',movie:'🎬',tv:'📺',pod:'🎧'},N={book:'Book',movie:'Movie',tv:'TV show',pod:'Podcast'};let selected=new Date().toISOString().slice(0,10),shown=new Date(),ft='all',st='movie',sf='All',bf='All',pf='All',ht='all';const seed={items:[{id:'b1',type:'book',title:'Harry Potter',creator:'J.K. Rowling',genre:'Fantasy, Young Adult',status:'Reading',rating:4,total:400,current:135,notes:'I love the world building.',favorite:true},{id:'m1',type:'movie',title:'Interstellar',creator:'Christopher Nolan',genre:'Sci-fi, Space',status:'Watched',rating:5,total:169,year:'2014',notes:'The score and ending stay with me.',favorite:true},{id:'t1',type:'tv',title:'Friends',creator:'',genre:'Comedy',status:'Watching',rating:4,total:32,current:18,notes:'Easy and funny at dinner.',favorite:true},{id:'p1',type:'pod',title:'Huberman Lab',creator:'Andrew Huberman',genre:'Health, Science',status:'Listening',rating:4,total:12,current:9,notes:'Practical ideas.',favorite:true}],logs:[{id:'l1',date:'2026-09-10',type:'book',item:'b1',title:'Harry Potter',detail:'p. 102 → p. 135',amount:33},{id:'l2',date:'2026-09-10',type:'tv',item:'t1',title:'Friends',detail:'Season 1 · EP 2, EP 3',eps:2},{id:'l3',date:'2026-09-10',type:'pod',item:'p1',title:'Huberman Lab',detail:'EP102 · Sleep Better'},{id:'l4',date:'2026-09-09',type:'movie',item:'m1',title:'Interstellar',detail:'★★★★★ · First watch'},{id:'l5',date:'2026-09-08',type:'book',item:'b1',title:'Harry Potter',detail:'p. 80 → p. 102',amount:22}],goals:{book:30,movie:50,tv:100,pod:80}};let D=JSON.parse(localStorage.getItem(K)||'null')||seed;let save=()=>localStorage.setItem(K,JSON.stringify(D)),item=id=>D.items.find(x=>x.id===id),date=k=>new Date(k+'T12:00:00'),key=d=>d.toISOString().slice(0,10),status=t=>t==='book'?['All','Want to read','Reading','Read','Paused','Did not finish','Favorites']:t==='movie'?['All','Want to watch','Watched','Favorites']:t==='tv'?['All','Want to watch','Watching','Watched','Paused','Dropped','Favorites']:['All','Want to listen','Listening','Listened','Favorites'];
@@ -261,7 +261,7 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
   const APP_URL='https://sseonie.github.io/read/';
   let cloudClient=null, cloudUser=null, cloudReady=false, cloudMessage='Not signed in';
   const saveOnDevice=save;
-  save=function(){ saveOnDevice(); if(cloudUser) uploadCloud(); };
+  save=function(){ saveOnDevice(); };
   function renderSync(){
     let box=document.getElementById('syncBox');
     if(!box){ box=document.createElement('div'); box.id='syncBox'; box.className='card sync-card'; document.querySelector('#me h1').insertAdjacentElement('afterend',box); }
@@ -303,10 +303,11 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     cloudClient.auth.getSession().then(({data})=>{ cloudUser=data.session?.user||null; renderSync(); if(cloudUser) loadCloud(); });
     cloudClient.auth.onAuthStateChange((_event,session)=>{ cloudUser=session?.user||null; renderSync(); if(cloudUser) setTimeout(loadCloud,0); });
   }
-  const supabaseScript=document.createElement('script');
-  supabaseScript.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-  supabaseScript.onload=setupCloud;
-  document.head.appendChild(supabaseScript);
+  renderSync=function(){
+    let box=document.getElementById('syncBox');
+    if(!box){ box=document.createElement('div'); box.id='syncBox'; box.className='card sync-card'; document.querySelector('#me h1').insertAdjacentElement('afterend',box); }
+    box.innerHTML='<div><b>Device backup</b><small>Download a backup here, then restore it on your other device.</small></div>';
+  };
   renderSync();
 </script><script>
   /* Deleting a media item also removes its related records and statistics. */
@@ -931,4 +932,30 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     const show=item(entry.item);if(show)show.current=D.logs.filter(record=>record.type==='tv'&&record.item===entry.item&&!record.calendarOnly).reduce((count,record)=>count+(record.eps||0),0);
     save();closeM();render();setTimeout(()=>detail(entry.item),0);
   }
+</script><script>
+  /* Device-to-device backup: no account or server required. */
+  window.exportData=function(){
+    const link=document.createElement('a');
+    link.href=URL.createObjectURL(new Blob([JSON.stringify(D,null,2)],{type:'application/json'}));
+    link.download='media-journal-backup-'+new Date().toISOString().slice(0,10)+'.json';
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+  };
+  window.importData=function(file){
+    if(!file)return;
+    if(file.size>5*1024*1024){alert('This backup file is too large.');return;}
+    const reader=new FileReader;
+    reader.onload=()=>{
+      try{
+        const restored=JSON.parse(reader.result);
+        if(!Array.isArray(restored.items)||!Array.isArray(restored.logs)||!restored.goals)throw new Error('Invalid backup');
+        if(!confirm('Restore this backup? It will replace the data currently saved on this device.'))return;
+        D=restored;
+        saveOnDevice(D);
+        render();
+        alert('Backup restored on this device.');
+      }catch(error){alert('That file is not a Media Journal backup.');}
+    };
+    reader.readAsText(file);
+  };
 </script></body></html>
