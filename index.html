@@ -958,4 +958,22 @@ function mine(){let count=t=>D.logs.filter(x=>x.type===t).length,pages=D.logs.fi
     };
     reader.readAsText(file);
   };
+</script><script>
+  /* TV progress is the furthest episode reached, never the sum of repeated logs. */
+  function refreshTvProgress(showId){
+    const show=item(showId);
+    if(!show||show.type!=='tv')return;
+    const episodes=D.logs
+      .filter(record=>record.type==='tv'&&record.item===showId&&!record.calendarOnly)
+      .flatMap(tvEpisodesFromRecord)
+      .filter(Number.isFinite);
+    if(episodes.length)show.current=Math.min(Math.max(...episodes),Number(show.total)||Math.max(...episodes));
+    else show.current=0;
+  }
+  function refreshAllTvProgress(){D.items.filter(record=>record.type==='tv').forEach(record=>refreshTvProgress(record.id));}
+  const renderWithCorrectTvProgress=render;
+  render=function(){refreshAllTvProgress();renderWithCorrectTvProgress();};
+  refreshAllTvProgress();
+  save();
+  render();
 </script></body></html>
